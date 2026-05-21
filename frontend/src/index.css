@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.logo{
+    display:inline-block;
+    height:4rem;
+}
+body{
+    background-color: rgb(0, 0, 0);
+    font-family: "PT Serif", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.wlcm-msg{
+  color:white;
+  font-size: 2rem;
+  margin-top: 2rem;
+  padding:10px;
+  display:inline-block !important;
+}
+
+.border-gradient {
+  background: linear-gradient(to right, #3b82f6, #a855f7);
+  padding: 2px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.border-gradient-inner {
+  background: #111827;
+  color: white;
+  border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  padding: 10px 20px;
+}
+
+.white-shadow {
+  transition: all 0.2s ease;
+}
+.white-shadow:hover{
+    
+    box-shadow: 0 0 10px rgba(244, 242, 242, 0.6);
+
+}
+
+.brand-text-glow {
+  transition: color 0.2s ease, text-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.brand-text-glow:hover {
+  color: #ffffff;
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.75),
+    0 0 14px rgba(255, 255, 255, 0.45);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+}
+.search-icon{
+  display:inline-block;
+  background-color:black;
+
+  
+  width:35px;
+  padding:5px;
+  border:2px solid white;
+}
+
+@media only screen and (max-width:700px){
+  .navq{
+    height:5rem;
+  }
+  
+}
+/* -------------iconbar css---------------- */
+.outer-iconbar{
+  margin-top:3rem;
+  display:flex;
+
+  width:100%;
+  align-items:center;
+  justify-content:center;
+  
+}
+.m-iconbar{
+  width:80%;
+}
+.inner-iconbar{
+
+  justify-content:space-evenly;
+}
+
+.icon-gradient-hover {
+  display: flex;             
+  flex-direction: column;    
+  align-items: center;      
+  justify-content: center;
+  gap: 4px;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.icon-gradient-hover:hover {
+  background: linear-gradient(to right, #3b82f6, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.icon-active {
+  background: linear-gradient(to right, #3b82f6, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer{
+  position:fixed;
+  bottom:0px;
+}
+.hero {
+  position: relative;
+  width: 100%;
+  height: clamp(280px, 58vh, 520px);
+  overflow: hidden;
+  background: #090909;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  image-rendering: auto;
+}
+
+@media only screen and (max-width: 700px) {
+  .hero {
+    height: clamp(220px, 36vh, 320px);
+  }
+}
+
+.cardstyle {
+  transition: all 0.3s ease-in-out;
+  transform: translateY(0);
+}
+.cardstyle:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 
+    0 10px 25px rgba(255, 255, 255, 0.15),
+    0 0 15px rgba(59, 130, 246, 0.3);
+}
