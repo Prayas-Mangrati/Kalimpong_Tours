@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Navbar({ searchPlace, setSearchPlace }) {
+export default function Navbar({ cardsRef,searchPlace, setSearchPlace }) {
   const lat = 27.0667;
   const lon = 88.4667;
   const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -29,6 +29,9 @@ export default function Navbar({ searchPlace, setSearchPlace }) {
     loadWeather();
   }, [lat, lon, API_KEY]);
 
+  const handleSearchClick=()=>{
+    cardsRef.current?.scrollIntoView({behaviour:"smooth",});
+  };
   return (
     <div className="border-gradient">
       <div className="rounded-b-lg border-gradient-inner p-4 text-white">
@@ -84,7 +87,7 @@ export default function Navbar({ searchPlace, setSearchPlace }) {
                 value={searchPlace}
                 onChange={(e) => setSearchPlace(e.target.value)}
               />
-              <button className="h-9 px-3 border-2 border-white border-l-0 rounded-r-lg text-white white-shadow">
+              <button onClick={handleSearchClick} className="h-9 px-3 border-2 border-white border-l-0 rounded-r-lg text-white white-shadow" >
                 Search
               </button>
             </div>

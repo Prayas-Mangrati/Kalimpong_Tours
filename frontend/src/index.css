@@ -6,6 +6,9 @@
     display:inline-block;
     height:4rem;
 }
+html{
+  scroll-behavior: smooth;
+}
 body{
     /* background-color: rgb(0, 0, 0); */
     background-image: url('../public/newBackground.png');
