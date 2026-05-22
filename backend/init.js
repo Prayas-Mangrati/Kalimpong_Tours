@@ -1,7 +1,13 @@
+require("dotenv").config();
+
 const Place = require("./models/place");
 const mongoose = require("mongoose");
 
-const mongoUrl =MONGO_URL;
+const mongoUrl = process.env.MONGO_URL;
+
+if (!mongoUrl) {
+  throw new Error("MONGO_URL is not defined");
+}
 
 const places = [
   {
@@ -64,10 +70,10 @@ const places = [
       "A colonial-era mansion surrounded by lush greenery and historical charm.",
     full_description:
       "Morgan House, located on Durpin Road in Kalimpong, is a charming colonial-era bungalow known for its old-world architecture, peaceful surroundings, and intriguing history. Built during the British period, it once served as the residence of a British officer’s family and still retains its vintage charm with wooden interiors, fireplaces, and spacious lawns. Surrounded by pine trees and scenic hills, the place offers a calm and slightly mysterious atmosphere. Over the years, Morgan House has gained popularity not just as a tourist lodge but also for its subtle haunted reputation, with locals sharing stories about unexplained sounds and sightings, adding a sense of thrill for visitors. Today, it is maintained as a heritage tourist stay where people can experience both the beauty of Kalimpong and a glimpse into its colonial past, making it a must-visit for history lovers and adventure seekers alike.",
-    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Morgan_House_Kalimpong_3.jpg/1280px-Morgan_House_Kalimpong_3.jpg",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Morgan_House_Kalimpong_3.jpg/1280px-Morgan_House_Kalimpong_3.jpg",
     price: "₹50/Person",
     latitude: 27.0579,
-    longitude: 88.4880,
+    longitude: 88.488,
   },
 
   {

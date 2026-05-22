@@ -27,11 +27,11 @@ export default function Hero() {
             />
           </div>
 
-          <div className="flex flex-colw-full items-center justify-center rounded-2xl border border-white/10 bg-black/20 px-4 py-6 text-center md:flex-[1] md:min-w-0 md:text-left">
-                <h1 className="wlcm-msg icon-gradient-hover m-0 p-0 text-lg sm:text-2xl lg:text-3xl">
+          <div className="flex flex-col w-full items-center justify-center rounded-2xl border border-white/10 bg-black/20 px-4 py-6 text-center md:flex-[1] md:min-w-0 md:text-left">
+                <h1 className="wlcm-msg icon-gradient-hover m-0 p-0 text-lg sm:text-2xl lg:text-3xl m-8 text-bold">
                 Welcome To Kalimpong Tours
                 </h1>
-                <p>A quiet hill station where nature slows you down and beauty surrounds you, where the hills whisper peace and the clouds feel closer..</p>
+                <p className="m-8 text-center">A quiet hill station where nature slows you down and beauty surrounds you, where the hills whisper peace and the clouds feel closer..</p>
           </div>
         </section>
       </div>

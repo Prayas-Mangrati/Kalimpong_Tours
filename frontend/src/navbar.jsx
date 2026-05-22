@@ -88,9 +88,9 @@ export default function Navbar({ searchPlace, setSearchPlace }) {
                 Search
               </button>
             </div>
-            <button className="bg-red-500 border-2 text-white rounded p-1 white-shadow self-end md:self-auto">
+            {/* <button className="bg-red-500 border-2 text-white rounded p-1 white-shadow self-end md:self-auto">
               Logout
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
