@@ -6,7 +6,7 @@ import { useState,useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import PlaceDetail from "./placeDetail";
 import Hero from "./hero.jsx";
-
+import AiAssistant from "./AiAssistant.jsx"; 
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
@@ -39,6 +39,7 @@ function App() {
                 />
               </main>
               <Footer />
+              <AiAssistant/>
             </div>
           </>
         }
