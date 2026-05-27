@@ -19,6 +19,7 @@ import {
   useMap,
 } from "react-leaflet";
 
+
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
