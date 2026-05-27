@@ -1,24 +1,14 @@
-import Lottie from "lottie-react";
-import robotAnimation from "../assets/robot.json";
-import { motion } from "framer-motion";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function AiAssistant() {
+  
   return (
-    <motion.div
-      className="fixed bottom-6 right-6 w-28 z-50 cursor-pointer"
-      animate={{
-        y: [0, -10, 0],
-      }}
-      transition={{
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-      whileHover={{
-        scale: 1.08,
-      }}
-    >
-      <Lottie animationData={robotAnimation} loop={true} />
-    </motion.div>
+    <div className="w-40 fixed bottom-6 right-6 z-50">
+      <DotLottieReact
+        src="/assets/robot.lottie"
+        loop
+        autoplay
+      />
+    </div>
   );
 }
