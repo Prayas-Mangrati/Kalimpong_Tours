@@ -17,11 +17,18 @@ export default function AiAssistant() {
     <>
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-4 right-4 z-[70] cursor-pointer flex h-[155px] w-[155px] items-center justify-center sm:bottom-5 sm:right-5 sm:h-[175px] sm:w-[175px]"
+        className="fixed bottom-4 right-4 z-[70] cursor-pointer flex h-[155px] w-[155px] items-center justify-center sm:bottom-5 sm:right-5 sm:h-[175px] sm:w-[175px] group fixed"
       >
+        <div className="absolute bottom-32 right-24 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none">
+          <div className="bg-[#111827] text-white text-sm px-4 py-2 rounded-2xl border border-cyan-400/20 shadow-[0_0_20px_rgba(59,130,246,0.3)] whitespace-nowrap">
+            <p>Hi, I'm KAI👋</p>
+            <p>Need Help?</p>
+          </div>
+        </div>
         <DotLottieReact
           src="/assets/robot.lottie"
-          className="h-full w-full"
+          className={`h-full w-full transition-all duration-300 hover:scale-110
+hover:drop-shadow-[0_0_30px_rgba(59,130,246,0.9)] ${(isOpen)? 'drop-shadow-[0_0_30px_rgba(59,130,246,0.8)] hover:scale-110':''}`}
           dotLottieRefCallback={(instance) => {
             lottieRef.current = instance;
           }}
