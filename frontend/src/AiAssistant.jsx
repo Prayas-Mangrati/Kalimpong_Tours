@@ -18,15 +18,18 @@ export default function AiAssistant() {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-  async function sendMessage() {
-    if (AiInput.trim() === "") return; //ignore empty message
+
+
+  async function sendMessage(messageText=AiInput) {
+    
+    if (isTyping ||messageText.trim() === "") return; //ignore empty message
     const userMessage = {
-      text: AiInput,
+      text: messageText,
       sender: "user",
     };
 
     setMessages((prevMessages) => [...prevMessages, userMessage]); //copy old arrray and append new message
-    const currentMessage = AiInput;
+    const currentMessage = messageText;
     setAiInput(""); //clear input after sending
     setAiInput("");
     setIsTyping(true);
@@ -41,8 +44,11 @@ export default function AiAssistant() {
           message: currentMessage,
         }),
       });
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.reply || "API request failed");
+      }
 
       const aiMessage = {
         text: data.reply,
@@ -52,7 +58,7 @@ export default function AiAssistant() {
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
       const aiMessage = {
-        text: "Sorry, I couldn't connect right now.",
+        text: error.message,
         sender: "KAI",
       };
 
@@ -120,15 +126,15 @@ hover:drop-shadow-[0_0_30px_rgba(59,130,246,0.9)] ${isOpen ? "drop-shadow-[0_0_3
                     </p>
 
                     <div className="flex flex-wrap justify-center gap-3 mt-8">
-                      <button className="px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/20 hover:hover:bg-emerald-500/25 transition-all duration-300 hover:scale-105 text-sm">
+                      <button onClick={() => sendMessage("Plan a 3-day trip in kalimpong")} className="px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/20 hover:hover:bg-emerald-500/25 transition-all duration-300 hover:scale-105 text-sm">
                         Plan a 3-day trip
                       </button>
 
-                      <button className="px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/20 hover:hover:bg-emerald-500/25 transition-all duration-300 hover:scale-105 text-sm">
+                      <button onClick={() => sendMessage("Best Viewpoints to visit in Kalimpong")} className="px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/20 hover:hover:bg-emerald-500/25 transition-all duration-300 hover:scale-105 text-sm">
                         Best viewpoints
                       </button>
 
-                      <button className="px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/20 hover:hover:bg-emerald-500/25 transition-all duration-300 hover:scale-105 text-sm">
+                      <button onClick={() => sendMessage("Budget homestays in Kalimpong")} className="px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/20 hover:hover:bg-emerald-500/25 transition-all duration-300 hover:scale-105 text-sm">
                         Budget homestays
                       </button>
                     </div>
@@ -170,7 +176,7 @@ hover:drop-shadow-[0_0_30px_rgba(59,130,246,0.9)] ${isOpen ? "drop-shadow-[0_0_3
                         />
 
                         <div className="bg-gray-700 px-4 py-3 rounded-2xl text-sm text-gray-300">
-                          KAI is thinking...
+                          <span className="animate-pulse">● ● ●</span>
                         </div>
                       </div>
                     )}
@@ -198,8 +204,8 @@ hover:drop-shadow-[0_0_30px_rgba(59,130,246,0.9)] ${isOpen ? "drop-shadow-[0_0_3
                     className="min-w-0 flex-1 rounded-md bg-gray-600 px-3 py-2 text-white placeholder:text-gray-400 border border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <i
-                    onClick={sendMessage}
-                    className="fa-solid fa-paper-plane cursor-pointer shrink-0"
+                    onClick={() => sendMessage()}
+                    className={`fa-solid fa-paper-plane shrink-0  ${isTyping ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
                     style={{ color: "rgb(28, 232, 14)" }}
                   ></i>
                 </div>
