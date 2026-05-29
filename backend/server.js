@@ -24,7 +24,9 @@ async function main() {
 }
 
 const placeRoutes = require("./routes/placeRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 app.use("/places", placeRoutes);
+app.use("/chat", chatRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server running..");

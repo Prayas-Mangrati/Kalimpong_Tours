@@ -18,7 +18,7 @@ export default function AiAssistant() {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-  function sendMessage() {
+  async function sendMessage() {
     if (AiInput.trim() === "") return; //ignore empty message
     const userMessage = {
       text: AiInput,
@@ -26,22 +26,46 @@ export default function AiAssistant() {
     };
 
     setMessages((prevMessages) => [...prevMessages, userMessage]); //copy old arrray and append new message
+    const currentMessage = AiInput;
     setAiInput(""); //clear input after sending
-    setTimeout(() => {
-      setIsTyping(true);
-    }, 500);
-    setTimeout(() => {
+    setAiInput("");
+    setIsTyping(true);
+
+    try {
+      const response = await fetch("http://localhost:8080/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: currentMessage,
+        }),
+      });
+
+      const data = await response.json();
+
       const aiMessage = {
-        text: "Kai is still learning",
+        text: data.reply,
         sender: "KAI",
       };
+
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
+    } catch (error) {
+      const aiMessage = {
+        text: "Sorry, I couldn't connect right now.",
+        sender: "KAI",
+      };
+
+      setMessages((prevMessages) => [...prevMessages, aiMessage]);
+
+      console.error(error);
+    } finally {
       setIsTyping(false);
-    }, 2000);
+    }
   }
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages,isTyping]);
+  }, [messages, isTyping]);
   return (
     <>
       <div
@@ -130,27 +154,29 @@ hover:drop-shadow-[0_0_30px_rgba(59,130,246,0.9)] ${isOpen ? "drop-shadow-[0_0_3
                             className="w-8 h-8 rounded-full object-cover"
                           />
 
-                          <div className="max-w-[80%] px-4 py-3 rounded-2xl text-sm bg-gray-700 text-white">
+                          <div className="max-w-[80%] px-4 py-3 rounded-2xl text-sm bg-gray-700 text-white whitespace-pre-wrap border border-gray-600">
                             {msg.text}
                           </div>
                         </div>
                       ),
                     )}
-                  </div>
-                )}
-                {isTyping && (
-                  <div className="flex items-center gap-3">
-                    <img
-                      src="/kai_face.jpeg"
-                      alt="KAI"
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
 
-                    <div className="bg-gray-700 px-4 py-3 rounded-2xl text-sm text-gray-300">
-                      KAI is thinking...
-                    </div>
+                    {isTyping && (
+                      <div className="flex items-center gap-3">
+                        <img
+                          src="/kai_face.jpeg"
+                          alt="KAI"
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+
+                        <div className="bg-gray-700 px-4 py-3 rounded-2xl text-sm text-gray-300">
+                          KAI is thinking...
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
+
                 <div ref={messagesEndRef}></div>
               </section>
               <section className="w-full bg-gray-800 px-4 py-4 shrink-0">
@@ -165,7 +191,7 @@ hover:drop-shadow-[0_0_30px_rgba(59,130,246,0.9)] ${isOpen ? "drop-shadow-[0_0_3
                     value={AiInput}
                     onChange={(e) => setAiInput(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter"){
+                      if (e.key === "Enter") {
                         sendMessage();
                       }
                     }}
