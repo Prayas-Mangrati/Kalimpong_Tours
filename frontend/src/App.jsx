@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import PlaceDetail from "./placeDetail";
 import Hero from "./hero.jsx";
 import AiAssistant from "./AiAssistant.jsx"; 
+import AddPlace from "./AddPlace.jsx";
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
@@ -45,7 +46,10 @@ function App() {
         }
       />
       <Route path="/place/:id" element={<PlaceDetail />} />
+      <Route path="/add-place" element={<AddPlace />} />
+
     </Routes>
+
   );
 }
 
