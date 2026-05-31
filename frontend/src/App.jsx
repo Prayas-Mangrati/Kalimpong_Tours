@@ -2,16 +2,17 @@ import Navbar from "./navbar.jsx";
 import Iconbar from "./iconbar.jsx";
 import Footer from "./footer.jsx";
 import CardSection from "./cardSection.jsx";
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import PlaceDetail from "./placeDetail";
 import Hero from "./hero.jsx";
-import AiAssistant from "./AiAssistant.jsx"; 
+import AiAssistant from "./AiAssistant.jsx";
 import AddPlace from "./AddPlace.jsx";
+import AdminLogin from "./AdminLogin.jsx";
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
-  const cardsRef=useRef(null);
+  const cardsRef = useRef(null);
   return (
     <Routes>
       <Route
@@ -26,30 +27,28 @@ function App() {
               />
               <main className="flex-grow">
                 <Hero />
-                
+
                 <div ref={cardsRef}>
                   <Iconbar
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
-                />
+                    selectedType={selectedType}
+                    setSelectedType={setSelectedType}
+                  />
                 </div>
                 <CardSection
-                  
                   selectedType={selectedType}
                   searchPlace={searchPlace}
                 />
               </main>
               <Footer />
-              <AiAssistant/>
+              <AiAssistant />
             </div>
           </>
         }
       />
       <Route path="/place/:id" element={<PlaceDetail />} />
       <Route path="/add-place" element={<AddPlace />} />
-
+      <Route path="/admin-login" element={<AdminLogin />} />
     </Routes>
-
   );
 }
 
