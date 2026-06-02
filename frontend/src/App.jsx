@@ -9,6 +9,7 @@ import Hero from "./hero.jsx";
 import AiAssistant from "./AiAssistant.jsx";
 import AddPlace from "./AddPlace.jsx";
 import AdminLogin from "./AdminLogin.jsx";
+import AdminDashboard from "./AdminDashboard.jsx";
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
@@ -47,7 +48,8 @@ function App() {
       />
       <Route path="/place/:id" element={<PlaceDetail />} />
       <Route path="/add-place" element={<AddPlace />} />
-      <Route path="/admin-login" element={<AdminLogin />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
     </Routes>
   );
 }

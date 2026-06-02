@@ -4,8 +4,36 @@ export default function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+    const response = await fetch(
+      "http://localhost:8080/admin/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+      localStorage.setItem("isAdmin", "true");
+
+      navigate("/admin/dashboard");
+    } else {
+      alert("Invalid credentials");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Login failed");
+  }
   };
 
   return (
