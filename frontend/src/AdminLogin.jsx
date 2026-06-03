@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -7,9 +8,7 @@ export default function AdminLogin() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-    const response = await fetch(
-      "http://localhost:8080/admin/login",
-      {
+      const response = await fetch("http://localhost:8080/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -18,23 +17,24 @@ export default function AdminLogin() {
           username,
           password,
         }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.setItem("isAdmin", "true");
+
+        navigate("/admin/dashboard");
+      } else {
+        alert(data.message || "Invalid credentials");
       }
-    );
-
-    const data = await response.json();
-
-    if (data.success) {
-      localStorage.setItem("isAdmin", "true");
-
-      navigate("/admin/dashboard");
-    } else {
-      alert("Invalid credentials");
+    } catch (error) {
+      console.error(error);
+      alert("Login failed");
     }
-  } catch (error) {
-    console.error(error);
-    alert("Login failed");
-  }
   };
+
+  const navigate = useNavigate();
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center">
