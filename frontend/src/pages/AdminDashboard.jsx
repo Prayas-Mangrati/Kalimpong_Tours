@@ -1,10 +1,30 @@
+import AdminPlaceCard from "../components/AdminPlaceCard";
+import { useState, useEffect } from "react";
 export default function AdminDashboard() {
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    async function fetchPlaces() {
+      try {
+        const response = await fetch("http://localhost:8080/places");
+        const data = await response.json();
+        setPlaces(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchPlaces();
+  }, []);
+
+  const hotel = places.filter((place) => place.type === "hotel");
+  const homestay = places.filter((place) => place.type === "homestay");
+  const tourist = places.filter((place) => place.type === "tourist");
   return (
     <div className="min-h-screen flex flex-col">
       <div className="border-gradient">
         <header className="border-gradient-inner text-white p-4 h-16 flex items-center rounded-lg">
-          <h1 className="text-xl font-bold">Admin Dashboard</h1>
-          <button className="ml-auto bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded border-2 border-white">
+          <h1 className="text-xl font-bold brand-text-glow whitespace-nowrap">Admin Dashboard</h1>
+          <button className="ml-auto bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded border-2 border-white brand-text-glow whitespace-nowrap">
             Logout
           </button>
         </header>
@@ -32,28 +52,68 @@ export default function AdminDashboard() {
         <div className="flex flex-wrap gap-6 justify-center p-6">
           <div className="border-gradient rounded-lg">
             <div className="border-gradient-inner p-4 rounded-lg">
-            <h2>Total Places Analytics</h2>
+              <h2>Total Places Analytics</h2>
+            </div>
           </div>
-          </div>
-           <div className="border-gradient rounded-lg">
+          <div className="border-gradient rounded-lg">
             <div className="border-gradient-inner p-4 rounded-lg">
-            <h2>Total Visitors</h2>
+              <h2>Total Visitors</h2>
+            </div>
           </div>
-          </div>
-           <div className="border-gradient rounded-lg">
+          <div className="border-gradient rounded-lg">
             <div className="border-gradient-inner p-4 rounded-lg">
-            <h2>Manage Destinations</h2>
-          </div>
+              <h2>Manage Destinations</h2>
+            </div>
           </div>
         </div>
       </div>
       <div className="border-gradient m-2">
-          <div className="border-gradient-inner p-4 rounded-lg ">
-            <h2 className="text-lg font-semibold text-center">Available Places</h2>
-            <div></div>
-
+        <div className="border-gradient-inner p-4 rounded-lg ">
+          <div className="flex justify-between items-center mb-4">
+            <i className="fa-solid fa-map-pin fa-2xl fa-border-white brand-text-glow whitespace-nowrap" style={{ color: "rgb(224, 22, 22)"}}></i>
+            <h1 className="text-2xl font-semibold text-center mt-2 brand-text-glow whitespace-nowrap">
+              Available Places
+            </h1>
+            <div className="border-2 border-white bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded inline-block brand-text-glow whitespace-nowrap">
+              <i className="fa-solid fa-plus"></i>
+              <span className="ml-1 ">Add New</span>
+            </div>
           </div>
+          <hr className="border-white border-2 m-4" />
+          <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-4 rounded-lg ">
+            <div>
+              <h2 className="mb-4 text-xl font-semibold text-center">Hotels</h2>
+              <div className="flex flex-col gap-3">
+                {hotel.map((place) => (
+                  <AdminPlaceCard key={place._id} data={place} />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="mb-4 text-xl font-semibold text-center">
+                Tourist Attractions
+              </h2>
+              <div className="flex flex-col gap-3">
+                {tourist.map((place) => (
+                  <AdminPlaceCard key={place._id} data={place} />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="mb-4 text-xl font-semibold text-center">
+                Homestays
+              </h2>
+              <div className="flex flex-col gap-3">
+                {homestay.map((place) => (
+                  <AdminPlaceCard key={place._id} data={place} />
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
+      </div>
     </div>
   );
 }

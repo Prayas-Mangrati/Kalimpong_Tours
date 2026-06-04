@@ -1,15 +1,15 @@
-import Navbar from "./navbar.jsx";
-import Iconbar from "./iconbar.jsx";
-import Footer from "./footer.jsx";
-import CardSection from "./cardSection.jsx";
+import Navbar from "./components/navbar.jsx";
+import Iconbar from "./components/iconbar.jsx";
+import Footer from "./components/footer.jsx";
+import CardSection from "./components/cardSection.jsx";
 import { useState, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
-import PlaceDetail from "./placeDetail";
-import Hero from "./hero.jsx";
-import AiAssistant from "./AiAssistant.jsx";
-import AddPlace from "./AddPlace.jsx";
-import AdminLogin from "./AdminLogin.jsx";
-import AdminDashboard from "./AdminDashboard.jsx";
+import PlaceDetail from "./pages/placeDetail.jsx";
+import Hero from "./components/hero.jsx";
+import AiAssistant from "./components/AiAssistant.jsx";
+import AddPlace from "./pages/AddPlace.jsx";
+import AdminLogin from "./pages/AdminLogin.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
@@ -49,7 +49,7 @@ function App() {
       <Route path="/place/:id" element={<PlaceDetail />} />
       <Route path="/add-place" element={<AddPlace />} />
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
+      <Route path="/admin/dashboard" element={<AdminDashboard />} />
     </Routes>
   );
 }
