@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Navbar from "./navbar";
-import Footer from "./footer";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 import { useNavigate } from "react-router-dom";
 
 import L from "leaflet";
