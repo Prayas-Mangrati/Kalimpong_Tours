@@ -1,8 +1,9 @@
 import AdminPlaceCard from "../components/AdminPlaceCard";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 export default function AdminDashboard() {
   const [places, setPlaces] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchPlaces() {
       try {
@@ -19,11 +20,31 @@ export default function AdminDashboard() {
   const hotel = places.filter((place) => place.type === "hotel");
   const homestay = places.filter((place) => place.type === "homestay");
   const tourist = places.filter((place) => place.type === "tourist");
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this place?",
+    );
+
+    if (!confirmDelete) return;
+
+    const response = await fetch(`http://localhost:8080/admin/place/${id}`, {
+      method: "DELETE",
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      setPlaces((prev) => prev.filter((place) => place._id !== id));
+    }
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <div className="border-gradient">
         <header className="border-gradient-inner text-white p-4 h-16 flex items-center rounded-lg">
-          <h1 className="text-xl font-bold brand-text-glow whitespace-nowrap">Admin Dashboard</h1>
+          <h1 className="text-xl font-bold brand-text-glow whitespace-nowrap">
+            Admin Dashboard
+          </h1>
           <button className="ml-auto bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded border-2 border-white brand-text-glow whitespace-nowrap">
             Logout
           </button>
@@ -70,11 +91,14 @@ export default function AdminDashboard() {
       <div className="border-gradient m-2">
         <div className="border-gradient-inner p-4 rounded-lg ">
           <div className="flex justify-between items-center mb-4">
-            <i className="fa-solid fa-map-pin fa-2xl fa-border-white brand-text-glow whitespace-nowrap" style={{ color: "rgb(224, 22, 22)"}}></i>
+            <i
+              className="fa-solid fa-map-pin fa-2xl fa-border-white brand-text-glow whitespace-nowrap"
+              style={{ color: "rgb(224, 22, 22)" }}
+            ></i>
             <h1 className="text-2xl font-semibold text-center mt-2 brand-text-glow whitespace-nowrap">
               Available Places
             </h1>
-            <div className="border-2 border-white bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded inline-block brand-text-glow whitespace-nowrap">
+            <div className="border-2 border-white bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded inline-block brand-text-glow whitespace-nowrap" onClick={() => navigate("/admin/add-place")}>
               <i className="fa-solid fa-plus"></i>
               <span className="ml-1 ">Add New</span>
             </div>
@@ -85,7 +109,7 @@ export default function AdminDashboard() {
               <h2 className="mb-4 text-xl font-semibold text-center">Hotels</h2>
               <div className="flex flex-col gap-3">
                 {hotel.map((place) => (
-                  <AdminPlaceCard key={place._id} data={place} />
+                  <AdminPlaceCard key={place._id} data={place} onDelete={handleDelete}/>
                 ))}
               </div>
             </div>
@@ -96,7 +120,7 @@ export default function AdminDashboard() {
               </h2>
               <div className="flex flex-col gap-3">
                 {tourist.map((place) => (
-                  <AdminPlaceCard key={place._id} data={place} />
+                  <AdminPlaceCard key={place._id} data={place} onDelete={handleDelete}/>
                 ))}
               </div>
             </div>
@@ -107,7 +131,7 @@ export default function AdminDashboard() {
               </h2>
               <div className="flex flex-col gap-3">
                 {homestay.map((place) => (
-                  <AdminPlaceCard key={place._id} data={place} />
+                  <AdminPlaceCard key={place._id} data={place} onDelete={handleDelete}/>
                 ))}
               </div>
             </div>

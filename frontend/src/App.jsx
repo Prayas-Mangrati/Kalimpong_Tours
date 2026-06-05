@@ -47,7 +47,7 @@ function App() {
         }
       />
       <Route path="/place/:id" element={<PlaceDetail />} />
-      <Route path="/add-place" element={<AddPlace />} />
+      <Route path="/admin/add-place" element={<AddPlace />} />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
     </Routes>

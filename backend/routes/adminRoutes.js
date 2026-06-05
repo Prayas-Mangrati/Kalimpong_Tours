@@ -27,7 +27,7 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
   try {
     const newPlace = new Place({
       title: req.body.title,
-      type: req.body.type.toLowerCase(),
+      type: (req.body.type.toLowerCase() === 'tourist attraction') ? 'tourist' : req.body.type.toLowerCase(),
       description: req.body.description,
       price: req.body.price,
       img: {
@@ -51,4 +51,23 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
     });
   }
 });
+
+router.delete("/place/:id", async (req, res) => {
+  try {
+    await Place.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: "Place deleted successfully",
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      message: "Delete failed",
+    });
+  }
+});
+
 module.exports = router;

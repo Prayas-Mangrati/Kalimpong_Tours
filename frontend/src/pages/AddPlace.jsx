@@ -1,9 +1,45 @@
 import { useRef, useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+import { useNavigate } from "react-router-dom";
+
 export default function AddPlace() {
+  const navigate = useNavigate();
   const cardsRef = useRef(null);
   const [searchPlace, setSearchPlace] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData]=useState({
+    title:"",
+    type:"",
+    description:"",
+    price:"",
+  });
+  const [image,setImage]=useState(null);
+
+
+  const handleSubmit=async(e)=>{
+  e.preventDefault();
+  setIsSubmitting(true);
+  const formDataToSend=new FormData();
+  formDataToSend.append("title",formData.title);
+  formDataToSend.append("type",formData.type);
+  formDataToSend.append("description",formData.description);
+  formDataToSend.append("price",formData.price);
+  formDataToSend.append("img",image);
+
+  const response=await fetch("http://localhost:8080/admin/add-place",{
+    method:"POST",
+    body:formDataToSend,
+  });
+  const result=await response.json();
+  //console.log(result);
+  if(result.success) {
+    alert("Place added successfully");
+    setIsSubmitting(false);
+    navigate("/admin/dashboard");
+  }
+  setIsSubmitting(false);
+}
 
   return (
     <>
@@ -39,6 +75,8 @@ export default function AddPlace() {
                   id="title"
                   placeholder="Enter the title"
                   className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
                 />
               </div>
 
@@ -57,6 +95,8 @@ export default function AddPlace() {
                           type="radio"
                           name="type"
                           value={placeType}
+                          checked={formData.type === placeType}
+                          onChange={(e) => setFormData({...formData, type: e.target.value})}
                           className="h-4 w-4 border-gray-500 bg-transparent text-blue-500 focus:ring-blue-500"
                         />
                         <span>{placeType}</span>
@@ -77,6 +117,8 @@ export default function AddPlace() {
                   id="description"
                   placeholder="Enter the description"
                   rows="5"
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
                   className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
                 />
               </div>
@@ -93,6 +135,8 @@ export default function AddPlace() {
                     type="number"
                     id="price"
                     placeholder="Enter the price"
+                    value={formData.price}
+                    onChange={(e) => setFormData({...formData, price: e.target.value})}
                     className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
                   />
                 </div>
@@ -107,11 +151,17 @@ export default function AddPlace() {
                   <input
                     type="file"
                     id="img"
+                    name="img"
+                    onChange={(e) => setImage(e.target.files[0])}
                     className="w-full rounded-xl border border-dashed border-white/15 bg-black/30 px-4 py-3 text-sm text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-gradient-to-r file:from-blue-500 file:to-violet-500 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:border-white/25"
                   />
                 </div>
+                
               </div>
             </div>
+            <div className="flex justify-center items-center mt-8"><button className={`w-[40%] lg:w-[30%] rounded-xl bg-blue-500 px-4 py-3 text-white hover:bg-blue-600 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`} onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting...' : 'Submit'}
+            </button></div>
           </div>
         </div>
       </main>
