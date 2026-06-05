@@ -5,7 +5,10 @@ const placeSchema=new mongoose.Schema({
     location:String,
     description:String,
     full_description:String,
-    img:String,
+    img:{
+        url:String,
+        filename:String,
+    },
     price:String,
     latitude:Number,
     longitude:Number

@@ -16,4 +16,6 @@ router.get("/:id", async (req, res) => {
   const place = await Place.findById(id);
   res.json(place);
 });
+
+router.post
 module.exports=router;
