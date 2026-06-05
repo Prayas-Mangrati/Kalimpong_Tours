@@ -19,7 +19,6 @@ import {
   useMap,
 } from "react-leaflet";
 
-
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -75,7 +74,7 @@ export default function PlaceDetail() {
   const [routePath, setRoutePath] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const API_URL=import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchPlace = async () => {
       try {
@@ -173,7 +172,7 @@ export default function PlaceDetail() {
       <div className="border-gradient mt-5 w-[92%] sm:w-[88%] lg:w-[80%] max-w-6xl mx-auto rounded-lg">
         <div className="text-white p-6 border-gradient-inner rounded-lg">
           <img
-            src={place.img}
+            src={place.img.url}
             alt={place.title}
             className="mt-8 border-gradient block mx-auto w-[86%] lg:w-[82%] h-64 sm:h-80 md:h-[28rem] lg:h-[32rem] object-cover object-center rounded-xl shadow-lg"
           />

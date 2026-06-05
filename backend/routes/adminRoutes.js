@@ -29,7 +29,7 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
       title: req.body.title,
       type: (req.body.type.toLowerCase() === 'tourist attraction') ? 'tourist' : req.body.type.toLowerCase(),
       description: req.body.description,
-      price: req.body.price,
+      price: (req.body.type.toLowerCase() === 'tourist attraction') ? `₹${req.body.price}/Person` : `₹${req.body.price}/Night`,
       img: {
         url: req.file.path,
         filename: req.file.filename,
