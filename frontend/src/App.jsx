@@ -10,6 +10,7 @@ import AiAssistant from "./components/AiAssistant.jsx";
 import AddPlace from "./pages/AddPlace.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import EditPlace from "./pages/EditPlace.jsx";
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
@@ -50,6 +51,7 @@ function App() {
       <Route path="/admin/add-place" element={<AddPlace />} />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/admin/edit/:id" element={<EditPlace/>}/>
     </Routes>
   );
 }

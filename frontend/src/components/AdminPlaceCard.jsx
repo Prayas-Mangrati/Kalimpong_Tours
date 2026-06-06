@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 export default function AdminPlaceCard({ data, onDelete }) {
+  const navigate = useNavigate();
   return (
     <>
       <div className="border-gradient  rounded-lg cardstyle">
@@ -12,7 +14,7 @@ export default function AdminPlaceCard({ data, onDelete }) {
           </div>
           <div className="text-lg font-semibold mr-8">{data.title}</div>
           <div className="flex flex-1 gap-4 justify-end ">
-            <i className="fa-solid fa-pen-to-square brand-text-glow"></i>
+            <i className="fa-solid fa-pen-to-square brand-text-glow" onClick={() => navigate(`/admin/edit/${data._id}`)}></i>
             <i
               className="fa-solid fa-trash brand-text-glow"
               onClick={() => onDelete(data._id)}
