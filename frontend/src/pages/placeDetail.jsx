@@ -195,8 +195,8 @@ export default function PlaceDetail() {
           <p className="mt-8">{place.full_description}</p>
 
           <p className="mt-8">
-            {place.type === "tourist" ? "Entry Fee: " : "Price: "}
-            {place.price}
+            {place.type === "tourist" ? "Entry Fee: " : "Price: "}₹
+            {place.price}{place.type === "tourist" ? "/Person" : "/Night"}
           </p>
 
           <p className="mt-10 mb-2 font-bold text-xl">Let's Get You There...</p>

@@ -14,8 +14,8 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row py-8 gap-8 md:gap-20 text-center md:text-left">
           {/* QUICK LINKS */}
           <div>
-            <h3 className="font-semibold">Quick Links</h3>
-            <div className="flex flex-col mt-3 gap-1">
+            <h3 className="font-semibold text-center">Quick Links</h3>
+            <div className="flex flex-col mt-3 gap-1 text-center">
               <a href="#">Home</a>
               <a href="#">Hotels</a>
               <a href="#">Homestays</a>
@@ -27,8 +27,8 @@ export default function Footer() {
 
           {/* SOCIAL */}
           <div>
-            <h3 className="font-semibold">Social Links</h3>
-            <div className="flex flex-col mt-3 gap-1">
+            <h3 className="font-semibold text-center">Social Links</h3>
+            <div className="flex flex-col mt-3 gap-1 justify-center items-center">
               <a href="#">LinkedIn</a>
               <a href="#">Instagram</a>
             </div>
@@ -36,7 +36,7 @@ export default function Footer() {
 
           {/* CONTACT */}
           <div>
-            <h3 className="font-semibold">Contact Info</h3>
+            <h3 className="font-semibold text-center">Contact Info</h3>
             <div className="flex flex-col mt-3 gap-1">
               <a href="#">Email: support@kalimpong.com</a>
               <a href="#">Location: Kalimpong, West Bengal</a>

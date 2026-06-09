@@ -27,9 +27,12 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
   try {
     const newPlace = new Place({
       title: req.body.title,
-      type: (req.body.type.toLowerCase() === 'tourist attraction') ? 'tourist' : req.body.type.toLowerCase(),
+      type:
+        req.body.type.toLowerCase() === "tourist attraction"
+          ? "tourist"
+          : req.body.type.toLowerCase(),
       description: req.body.description,
-      price: (req.body.type.toLowerCase() === 'tourist attraction') ? `₹${req.body.price}/Person` : `₹${req.body.price}/Night`,
+      price: req.body.price,
       img: {
         url: req.file.path,
         filename: req.file.filename,
@@ -69,5 +72,26 @@ router.delete("/place/:id", async (req, res) => {
     });
   }
 });
+router.get("/place/:id", async (req, res) => {
+  const place = await Place.findById(req.params.id);
+  if (place) {
+    res.json(place);
+  }
+});
+router.put("/place/:id", async (req, res) => {
+  try {
+    await Place.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
+    res.json({
+      success: true,
+      message: "Place updated successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update place",
+    });
+  }
+});
 module.exports = router;

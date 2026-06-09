@@ -23,7 +23,7 @@ export default function CardSection({ selectedType, searchPlace }) {
     return matchesType && matchesSearch;
   });
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-2 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {filteredPlaces.map((place) => (
         <Card key={`${place._id}`} data={place} />
         
