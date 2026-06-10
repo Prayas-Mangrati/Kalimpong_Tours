@@ -32,6 +32,7 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
           ? "tourist"
           : req.body.type.toLowerCase(),
       description: req.body.description,
+      full_description: req.body.full_description,
       price: req.body.price,
       img: {
         url: req.file.path,
@@ -78,9 +79,24 @@ router.get("/place/:id", async (req, res) => {
     res.json(place);
   }
 });
-router.put("/place/:id", async (req, res) => {
+router.put("/place/:id", upload.single("img"), async (req, res) => {
   try {
-    await Place.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatePayload = {
+      title: req.body.title,
+      type: req.body.type,
+      description: req.body.description,
+      full_description: req.body.full_description,
+      price: req.body.price,
+    };
+
+    if (req.file) {
+      updatePayload.img = {
+        url: req.file.path,
+        filename: req.file.filename,
+      };
+    }
+
+    await Place.findByIdAndUpdate(req.params.id, updatePayload, { new: true });
 
     res.json({
       success: true,

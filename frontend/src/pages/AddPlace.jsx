@@ -12,7 +12,7 @@ export default function AddPlace() {
     title:"",
     type:"",
     description:"",
-    fullDescription:"",
+    full_description:"",
     price:"",
   });
   const [image,setImage]=useState(null);
@@ -25,7 +25,7 @@ export default function AddPlace() {
   formDataToSend.append("title",formData.title);
   formDataToSend.append("type",formData.type);
   formDataToSend.append("description",formData.description);
-  formDataToSend.append("fullDescription",formData.fullDescription);
+  formDataToSend.append("full_description",formData.full_description);
   formDataToSend.append("price",formData.price);
   formDataToSend.append("img",image);
 
@@ -126,7 +126,7 @@ export default function AddPlace() {
               </div>
               <div className="grid gap-2">
                 <label
-                  htmlFor="fullDescription"
+                  htmlFor="full_description"
                   className="text-sm font-medium text-gray-200"
                 >
                   Full Description
@@ -135,8 +135,8 @@ export default function AddPlace() {
                   id="fullDescription"
                   placeholder="Enter full description"
                   rows="5"
-                  value={formData.fullDescription}
-                  onChange={(e) => setFormData({...formData, fullDescription: e.target.value})}
+                  value={formData.full_description}
+                  onChange={(e) => setFormData({...formData, full_description: e.target.value})}
                   className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
                 />
               </div>
