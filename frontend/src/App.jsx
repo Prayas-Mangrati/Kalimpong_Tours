@@ -11,48 +11,52 @@ import AddPlace from "./pages/AddPlace.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import EditPlace from "./pages/EditPlace.jsx";
+import Toast from "./components/Toast.jsx";
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
   const cardsRef = useRef(null);
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            <div className="min-h-screen flex flex-col">
-              <Navbar
-                cardsRef={cardsRef}
-                searchPlace={searchPlace}
-                setSearchPlace={setSearchPlace}
-              />
-              <main className="flex-grow">
-                <Hero />
-
-                <div ref={cardsRef}>
-                  <Iconbar
-                    selectedType={selectedType}
-                    setSelectedType={setSelectedType}
-                  />
-                </div>
-                <CardSection
-                  selectedType={selectedType}
+    <>
+      <Toast />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <div className="min-h-screen flex flex-col">
+                <Navbar
+                  cardsRef={cardsRef}
                   searchPlace={searchPlace}
+                  setSearchPlace={setSearchPlace}
                 />
-              </main>
-              <Footer />
-              <AiAssistant />
-            </div>
-          </>
-        }
-      />
-      <Route path="/place/:id" element={<PlaceDetail />} />
-      <Route path="/admin/add-place" element={<AddPlace />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      <Route path="/admin/edit/:id" element={<EditPlace/>}/>
-    </Routes>
+                <main className="flex-grow">
+                  <Hero />
+
+                  <div ref={cardsRef}>
+                    <Iconbar
+                      selectedType={selectedType}
+                      setSelectedType={setSelectedType}
+                    />
+                  </div>
+                  <CardSection
+                    selectedType={selectedType}
+                    searchPlace={searchPlace}
+                  />
+                </main>
+                <Footer />
+                <AiAssistant />
+              </div>
+            </>
+          }
+        />
+        <Route path="/place/:id" element={<PlaceDetail />} />
+        <Route path="/admin/add-place" element={<AddPlace />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/edit/:id" element={<EditPlace />} />
+      </Routes>
+    </>
   );
 }
 
