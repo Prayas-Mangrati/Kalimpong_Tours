@@ -1,9 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
 export default function EditPlace() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const {showToast} = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState(null);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
@@ -65,15 +67,15 @@ export default function EditPlace() {
       method: "PUT",
       body: formDataToSend,
     });
-
+    
     const result = await response.json();
     if (result.success) {
       setIsSubmitting(false);
-      alert("Place updated successfully");
+      showToast("Place updated successfully");
       navigate("/admin/dashboard");
     } else {
       setIsSubmitting(false);
-      alert("Failed to update place");
+      showToast("Failed to update place", "error");
       navigate("/admin/dashboard");
     }
   };

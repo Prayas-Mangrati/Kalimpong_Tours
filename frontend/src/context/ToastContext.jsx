@@ -8,7 +8,7 @@ export function ToastProvider({ children }) {
     type: "success",
   });
 
-  const showToast = (message,type="success") => {
+  const showToast = (message, type="success") => {
     setToast({
         show:true,
         message,
@@ -20,7 +20,7 @@ export function ToastProvider({ children }) {
             message:"",
             type:"success",
         });
-    },3000);
+    },4500);
   };
 
   return (
