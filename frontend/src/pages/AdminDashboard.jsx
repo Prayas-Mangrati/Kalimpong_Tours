@@ -13,7 +13,11 @@ export default function AdminDashboard() {
         const data = await response.json();
         setPlaces(data);
       } catch (error) {
-        showToast("An error occurred while fetching places", "error","circle-xmark");
+        showToast(
+          "An error occurred while fetching places",
+          "error",
+          "circle-xmark",
+        );
       }
     }
     fetchPlaces();
@@ -101,7 +105,10 @@ export default function AdminDashboard() {
             <h1 className="text-2xl font-semibold text-center mt-2 brand-text-glow whitespace-nowrap">
               Available Places
             </h1>
-            <div className="border-2 border-white bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded inline-block brand-text-glow whitespace-nowrap" onClick={() => navigate("/admin/add-place")}>
+            <div
+              className="border-2 border-white bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded inline-block brand-text-glow whitespace-nowrap"
+              onClick={() => navigate("/admin/add-place")}
+            >
               <i className="fa-solid fa-plus"></i>
               <span className="ml-1 ">Add New</span>
             </div>
@@ -112,7 +119,11 @@ export default function AdminDashboard() {
               <h2 className="mb-4 text-xl font-semibold text-center">Hotels</h2>
               <div className="flex flex-col gap-3">
                 {hotel.map((place) => (
-                  <AdminPlaceCard key={place._id} data={place} onDelete={handleDelete}/>
+                  <AdminPlaceCard
+                    key={place._id}
+                    data={place}
+                    onDelete={handleDelete}
+                  />
                 ))}
               </div>
             </div>
@@ -123,7 +134,11 @@ export default function AdminDashboard() {
               </h2>
               <div className="flex flex-col gap-3">
                 {tourist.map((place) => (
-                  <AdminPlaceCard key={place._id} data={place} onDelete={handleDelete}/>
+                  <AdminPlaceCard
+                    key={place._id}
+                    data={place}
+                    onDelete={handleDelete}
+                  />
                 ))}
               </div>
             </div>
@@ -134,7 +149,11 @@ export default function AdminDashboard() {
               </h2>
               <div className="flex flex-col gap-3">
                 {homestay.map((place) => (
-                  <AdminPlaceCard key={place._id} data={place} onDelete={handleDelete}/>
+                  <AdminPlaceCard
+                    key={place._id}
+                    data={place}
+                    onDelete={handleDelete}
+                  />
                 ))}
               </div>
             </div>

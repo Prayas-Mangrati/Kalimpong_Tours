@@ -8,6 +8,7 @@ export default function AddPlace() {
   const navigate = useNavigate();
   const cardsRef = useRef(null);
   const [searchPlace, setSearchPlace] = useState("");
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -22,6 +23,44 @@ export default function AddPlace() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newErrors = {};
+
+    if (!formData.title.trim()) {
+      newErrors.title = "Title is required";
+    }
+
+    if (!formData.type) {
+      newErrors.type = "Please select a type";
+    }
+
+    if (!formData.description.trim()) {
+      newErrors.description = "Short description is required";
+    }
+
+    if (!formData.full_description.trim()) {
+      newErrors.full_description = "Full description is required";
+    }
+
+    if (!formData.price) {
+      newErrors.price = "Price is required";
+    }
+
+    if (!image) {
+      newErrors.image = "Please select an image";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      setIsSubmitting(false);
+      showToast(
+        "Please fill all required fields",
+        "warning",
+        "triangle-exclamation",
+      );
+      return;
+    }
+
     setIsSubmitting(true);
     const formDataToSend = new FormData();
     formDataToSend.append("title", formData.title);
@@ -38,11 +77,15 @@ export default function AddPlace() {
     const result = await response.json();
     //console.log(result);
     if (result.success) {
-      showToast("Place added successfully","success","check");
+      showToast("Place added successfully", "success", "check");
       navigate("/admin/dashboard");
       setIsSubmitting(false);
     } else {
-      showToast(result.message || "Failed to add place", "error","circle-xmark");
+      showToast(
+        result.message || "Failed to add place",
+        "error",
+        "circle-xmark",
+      );
       navigate("/admin/dashboard");
     }
     setIsSubmitting(false);
@@ -81,19 +124,24 @@ export default function AddPlace() {
                   type="text"
                   id="title"
                   placeholder="Enter the title"
-                  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                  className={`w-full rounded-xl border ${errors.title ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                   value={formData.title}
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
                 />
+                {errors.title && (
+                  <p className="text-red-400 text-sm mt-1">{errors.title}</p>
+                )}
               </div>
 
               <div className="grid gap-3">
                 <label className="text-sm font-medium text-gray-200">
                   Select Type of Place
                 </label>
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div
+                  className={`grid gap-3 sm:grid-cols-3 rounded-xl p-2 ${errors.type ? " border-2 border-red-500" : ""} `}
+                >
                   {["Tourist Attraction", "Hotel", "Homestay"].map(
                     (placeType) => (
                       <label
@@ -115,6 +163,9 @@ export default function AddPlace() {
                     ),
                   )}
                 </div>
+                {errors.type && (
+                  <p className="text-red-400 text-sm mt-1">{errors.type}</p>
+                )}
               </div>
 
               <div className="grid gap-2">
@@ -132,7 +183,7 @@ export default function AddPlace() {
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                  className={`w-full resize-none rounded-xl border ${errors.description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
               </div>
               <div className="grid gap-2">
@@ -153,7 +204,7 @@ export default function AddPlace() {
                       full_description: e.target.value,
                     })
                   }
-                  className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                  className={`w-full resize-none rounded-xl border ${errors.full_description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
               </div>
 
@@ -173,7 +224,7 @@ export default function AddPlace() {
                     onChange={(e) =>
                       setFormData({ ...formData, price: e.target.value })
                     }
-                    className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                    className={`w-full rounded-xl border ${errors.price ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                   />
                 </div>
 
@@ -189,7 +240,7 @@ export default function AddPlace() {
                     id="img"
                     name="img"
                     onChange={(e) => setImage(e.target.files[0])}
-                    className="w-full rounded-xl border border-dashed border-white/15 bg-black/30 px-4 py-3 text-sm text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-gradient-to-r file:from-blue-500 file:to-violet-500 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:border-white/25"
+                    className={`w-full rounded-xl border ${errors.img ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-sm text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-gradient-to-r file:from-blue-500 file:to-violet-500 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:border-white/25`}
                   />
                 </div>
               </div>

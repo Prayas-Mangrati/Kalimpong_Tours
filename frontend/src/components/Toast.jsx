@@ -12,7 +12,7 @@ export default function Toast() {
           <div className="text-2xl">
             <i
               className={`fa-solid fa-${toast.icon} ${
-                toast.type === "success" ? "text-green-400" : "text-red-400"
+                toast.type === "success" ? "text-green-400" : toast.type==="warning" ? "text-yellow-400" : "text-red-400"
               } text-xl`}
             />
           </div>
