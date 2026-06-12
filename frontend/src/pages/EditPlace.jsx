@@ -71,11 +71,11 @@ export default function EditPlace() {
     const result = await response.json();
     if (result.success) {
       setIsSubmitting(false);
-      showToast("Place updated successfully");
+      showToast("Place updated successfully","success","pen");
       navigate("/admin/dashboard");
     } else {
       setIsSubmitting(false);
-      showToast("Failed to update place", "error");
+      showToast("Failed to update place", "error", "circle-xmark");
       navigate("/admin/dashboard");
     }
   };

@@ -10,15 +10,14 @@ export default function Toast() {
       <div className="border-gradient rounded-2xl shadow-2xl">
         <div className="border-gradient-inner flex items-center gap-3 rounded-2xl px-5 py-4 backdrop-blur-xl bg-black/40">
           <div className="text-2xl">
-            {toast.type === "success" ? (
-              <i className="fa-solid fa-circle-check text-green-400 text-xl"></i>
-            ) : (
-              <i className="fa-solid fa-circle-xmark text-red-400 text-xl"></i>
-            )}
+            <i
+              className={`fa-solid fa-${toast.icon} ${
+                toast.type === "success" ? "text-green-400" : "text-red-400"
+              } text-xl`}
+            />
           </div>
 
           <div>
-
             <p className="text-sm text-gray-300">{toast.message}</p>
           </div>
         </div>

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { showToast } = useToast();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,15 +25,14 @@ export default function AdminLogin() {
 
       if (data.success) {
         localStorage.setItem("isAdmin", "true");
-        showToast("Logged in successfully", "success");
+        showToast("Logged in successfully", "success","right-to-bracket");
 
         navigate("/admin/dashboard");
       } else {
-        alert(data.message || "Invalid credentials");
-        showToast("Invalid username or password", "error");
+        showToast("Invalid username or password", "error", "circle-xmark");
       }
     } catch (error) {
-      showToast("An error occurred during login", "error");
+      showToast("An error occurred during login", "error", "circle-xmark");
     }
   };
 

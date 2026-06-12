@@ -38,11 +38,11 @@ export default function AddPlace() {
     const result = await response.json();
     //console.log(result);
     if (result.success) {
-      showToast("Place added successfully");
+      showToast("Place added successfully","success","check");
       navigate("/admin/dashboard");
       setIsSubmitting(false);
     } else {
-      showToast(result.message || "Failed to add place", "error");
+      showToast(result.message || "Failed to add place", "error","circle-xmark");
       navigate("/admin/dashboard");
     }
     setIsSubmitting(false);

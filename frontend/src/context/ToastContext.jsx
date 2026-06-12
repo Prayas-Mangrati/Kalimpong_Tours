@@ -8,11 +8,12 @@ export function ToastProvider({ children }) {
     type: "success",
   });
 
-  const showToast = (message, type="success") => {
+  const showToast = (message, type="success", icon="check") => {
     setToast({
         show:true,
         message,
         type,
+        icon,
     });
     setTimeout(() => {
         setToast({

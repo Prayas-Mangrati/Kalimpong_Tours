@@ -13,7 +13,7 @@ export default function AdminDashboard() {
         const data = await response.json();
         setPlaces(data);
       } catch (error) {
-        showToast("An error occurred while fetching places", "error");
+        showToast("An error occurred while fetching places", "error","circle-xmark");
       }
     }
     fetchPlaces();
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
 
     if (result.success) {
       setPlaces((prev) => prev.filter((place) => place._id !== id));
-      showToast("Place deleted successfully", "success");
+      showToast("Place deleted successfully", "success", "trash");
     }
   };
   return (
