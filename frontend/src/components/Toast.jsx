@@ -18,9 +18,6 @@ export default function Toast() {
           </div>
 
           <div>
-            <p className="font-semibold text-white">
-              {toast.type === "success" ? "Success" : "Error"}
-            </p>
 
             <p className="text-sm text-gray-300">{toast.message}</p>
           </div>

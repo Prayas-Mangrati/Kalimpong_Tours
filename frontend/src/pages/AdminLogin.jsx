@@ -23,14 +23,15 @@ export default function AdminLogin() {
 
       if (data.success) {
         localStorage.setItem("isAdmin", "true");
+        showToast("Logged in successfully", "success");
 
         navigate("/admin/dashboard");
       } else {
         alert(data.message || "Invalid credentials");
+        showToast("Invalid username or password", "error");
       }
     } catch (error) {
-      console.error(error);
-      alert("Login failed");
+      showToast("An error occurred during login", "error");
     }
   };
 

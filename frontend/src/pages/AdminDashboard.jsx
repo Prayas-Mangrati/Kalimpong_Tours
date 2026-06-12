@@ -1,9 +1,11 @@
 import AdminPlaceCard from "../components/AdminPlaceCard";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
 export default function AdminDashboard() {
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
+  const { showToast } = useToast();
   useEffect(() => {
     async function fetchPlaces() {
       try {
@@ -11,7 +13,7 @@ export default function AdminDashboard() {
         const data = await response.json();
         setPlaces(data);
       } catch (error) {
-        console.log(error);
+        showToast("An error occurred while fetching places", "error");
       }
     }
     fetchPlaces();
@@ -36,6 +38,7 @@ export default function AdminDashboard() {
 
     if (result.success) {
       setPlaces((prev) => prev.filter((place) => place._id !== id));
+      showToast("Place deleted successfully", "success");
     }
   };
   return (
