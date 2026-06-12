@@ -30,12 +30,17 @@ export default function AdminDashboard() {
   const tourist = places.filter((place) => place.type === "tourist");
 
   const confirmDelete = async () => {
-    const response = await fetch(`http://localhost:8080/admin/place/${placeToDelete._id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `http://localhost:8080/admin/place/${placeToDelete._id}`,
+      {
+        method: "DELETE",
+      },
+    );
     const result = await response.json();
     if (result.success) {
-      setPlaces((prev) => prev.filter((place) => place._id !== placeToDelete._id));
+      setPlaces((prev) =>
+        prev.filter((place) => place._id !== placeToDelete._id),
+      );
       showToast("Place deleted successfully", "success", "trash");
     }
     setShowDeleteModal(false);
@@ -46,7 +51,6 @@ export default function AdminDashboard() {
     setPlaceToDelete(data);
     setShowDeleteModal(true);
     return;
-  
 
     const response = await fetch(`http://localhost:8080/admin/place/${id}`, {
       method: "DELETE",
@@ -59,6 +63,13 @@ export default function AdminDashboard() {
       showToast("Place deleted successfully", "success", "trash");
     }
   };
+  const handleLogout = () => {
+    localStorage.removeItem("isAdmin");
+
+    showToast("Logged out successfully!", "success", "right-from-bracket");
+
+    navigate("/");
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <div className="border-gradient">
@@ -66,7 +77,10 @@ export default function AdminDashboard() {
           <h1 className="text-xl font-bold brand-text-glow whitespace-nowrap">
             Admin Dashboard
           </h1>
-          <button className="ml-auto bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded border-2 border-white brand-text-glow whitespace-nowrap">
+          <button
+            className="ml-auto bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded border-2 border-white brand-text-glow whitespace-nowrap"
+            onClick={handleLogout}
+          >
             Logout
           </button>
         </header>
@@ -174,43 +188,43 @@ export default function AdminDashboard() {
           </section>
         </div>
       </div>
-       {showDeleteModal && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-        <div className="border-gradient rounded-2xl w-[90%] max-w-md shadow-2xl">
-          <div className="border-gradient-inner rounded-2xl p-6 text-center">
-            <i className="fa-solid fa-triangle-exclamation text-yellow-400 text-5xl mb-4"></i>
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="border-gradient rounded-2xl w-[90%] max-w-md shadow-2xl">
+            <div className="border-gradient-inner rounded-2xl p-6 text-center">
+              <i className="fa-solid fa-triangle-exclamation text-yellow-400 text-5xl mb-4"></i>
 
-            <h2 className="text-2xl font-semibold text-white">
-              Delete <span className="text-red-400">"{placeToDelete?.title}"</span>?
-            </h2>
+              <h2 className="text-2xl font-semibold text-white">
+                Delete{" "}
+                <span className="text-red-400">"{placeToDelete?.title}"</span>?
+              </h2>
 
-            <p className="mt-3 text-gray-300">
-              This action cannot be undone.
-            </p>
+              <p className="mt-3 text-gray-300">
+                This action cannot be undone.
+              </p>
 
-            <div className="flex justify-center gap-4 mt-8">
-              <button
-                onClick={() => {
-                  setShowDeleteModal(false);
-                  setPlaceToDelete(null);
-                }}
-                className="px-5 py-2 rounded-xl border border-white/20 text-white hover:bg-white/10 transition"
-              >
-                Cancel
-              </button>
+              <div className="flex justify-center gap-4 mt-8">
+                <button
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setPlaceToDelete(null);
+                  }}
+                  className="px-5 py-2 rounded-xl border border-white/20 text-white hover:bg-white/10 transition"
+                >
+                  Cancel
+                </button>
 
-              <button
-                onClick={confirmDelete}
-                className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white transition"
-              >
-                Delete
-              </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white transition"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
-       
   );
 }

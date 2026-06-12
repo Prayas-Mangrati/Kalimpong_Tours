@@ -12,6 +12,7 @@ import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import EditPlace from "./pages/EditPlace.jsx";
 import Toast from "./components/Toast.jsx";
+import ProtectedRoute from "./components/ProtectedRoutes.jsx";
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
@@ -51,10 +52,10 @@ function App() {
           }
         />
         <Route path="/place/:id" element={<PlaceDetail />} />
-        <Route path="/admin/add-place" element={<AddPlace />} />
+        <Route path="/admin/add-place" element={<ProtectedRoute><AddPlace /></ProtectedRoute>} />
         <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/edit/:id" element={<EditPlace />} />
+        <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin/edit/:id" element={<ProtectedRoute><EditPlace /></ProtectedRoute>} />
       </Routes>
     </>
   );
