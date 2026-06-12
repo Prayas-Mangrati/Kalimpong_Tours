@@ -58,7 +58,7 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
 
 router.delete("/place/:id", async (req, res) => {
   try {
-    const place= await Place.findByIdAndDelete(req.params.id);
+    const place = await Place.findByIdAndDelete(req.params.id);
     await cloudinary.uploader.destroy(place.img.filename);
     await Place.findByIdAndDelete(req.params.id);
 
@@ -83,6 +83,7 @@ router.get("/place/:id", async (req, res) => {
 });
 router.put("/place/:id", upload.single("img"), async (req, res) => {
   try {
+    const place = await Place.findById(req.params.id);
     const updatePayload = {
       title: req.body.title,
       type: req.body.type,
@@ -92,6 +93,12 @@ router.put("/place/:id", upload.single("img"), async (req, res) => {
     };
 
     if (req.file) {
+      // Delete old image from Cloudinary
+      if (place?.img?.filename) {
+        await cloudinary.uploader.destroy(place.img.filename);
+      }
+
+      // Save new image
       updatePayload.img = {
         url: req.file.path,
         filename: req.file.filename,
