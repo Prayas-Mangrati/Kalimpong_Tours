@@ -17,7 +17,7 @@ export default function AdminPlaceCard({ data, onDelete }) {
             <i className="fa-solid fa-pen-to-square brand-text-glow" onClick={() => navigate(`/admin/edit/${data._id}`)}></i>
             <i
               className="fa-solid fa-trash brand-text-glow"
-              onClick={() => onDelete(data._id)}
+              onClick={() => onDelete(data)}
             ></i>
           </div>
         </div>
