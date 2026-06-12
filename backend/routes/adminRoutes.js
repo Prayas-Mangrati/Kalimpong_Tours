@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const { storage } = require("../cloudConfig");
+const { cloudinary, storage } = require("../cloudConfig");
 const upload = multer({ storage });
 const Place = require("../models/place");
 
@@ -58,6 +58,8 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
 
 router.delete("/place/:id", async (req, res) => {
   try {
+    const place= await Place.findByIdAndDelete(req.params.id);
+    await cloudinary.uploader.destroy(place.img.filename);
     await Place.findByIdAndDelete(req.params.id);
 
     res.json({
