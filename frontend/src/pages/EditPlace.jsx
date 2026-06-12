@@ -5,11 +5,12 @@ import { useToast } from "../context/ToastContext";
 export default function EditPlace() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const {showToast} = useToast();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState(null);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     title: "",
     type: "",
@@ -50,6 +51,39 @@ export default function EditPlace() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newErrors = {};
+
+    if (!formData.title.trim()) {
+      newErrors.title = "Title is required";
+    }
+
+    if (!formData.type) {
+      newErrors.type = "Please select a type";
+    }
+
+    if (!formData.description.trim()) {
+      newErrors.description = "Short description is required";
+    }
+
+    if (!formData.full_description.trim()) {
+      newErrors.full_description = "Full description is required";
+    }
+
+    if (!formData.price) {
+      newErrors.price = "Price is required";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      setIsSubmitting(false);
+      showToast(
+        "Please fill all required fields",
+        "warning",
+        "triangle-exclamation",
+      );
+      return;
+    }
     setIsSubmitting(true);
 
     const formDataToSend = new FormData();
@@ -67,11 +101,11 @@ export default function EditPlace() {
       method: "PUT",
       body: formDataToSend,
     });
-    
+
     const result = await response.json();
     if (result.success) {
       setIsSubmitting(false);
-      showToast("Place updated successfully","success","pen");
+      showToast("Place updated successfully", "success", "pen");
       navigate("/admin/dashboard");
     } else {
       setIsSubmitting(false);
@@ -123,19 +157,26 @@ export default function EditPlace() {
                   type="text"
                   id="title"
                   placeholder="Enter the title"
-                  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                  className={`w-full rounded-xl border ${errors.title ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                   value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, title: e.target.value });
+                    setErrors({
+                      ...errors,
+                      title: "",
+                    });
+                  }}
                 />
+                {errors.title && (
+                  <p className="text-red-400 text-sm mt-1">{errors.title}</p>
+                )}
               </div>
 
               <div className="grid gap-3">
                 <label className="text-sm font-medium text-gray-200">
                   Select Type of Place
                 </label>
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div className={`rounded-xl p-2 ${errors.type ? "border-2 border-red-500" : ""}`}>
                   {["tourist", "hotel", "homestay"].map((placeType) => (
                     <label
                       key={placeType}
@@ -146,9 +187,13 @@ export default function EditPlace() {
                         name="type"
                         value={placeType}
                         checked={formData.type === placeType}
-                        onChange={(e) =>
-                          setFormData({ ...formData, type: e.target.value })
-                        }
+                        onChange={(e) => {
+                          setFormData({ ...formData, type: e.target.value });
+                          setErrors({
+                            ...errors,
+                            type: "",
+                          });
+                        }}
                         className="h-4 w-4 border-gray-500 bg-transparent text-blue-500 focus:ring-blue-500"
                       />
                       <span>
@@ -174,11 +219,18 @@ export default function EditPlace() {
                   placeholder="Enter one line description"
                   rows="1"
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                  onChange={(e) => {
+                    setFormData({ ...formData, description: e.target.value });
+                    setErrors({
+                      ...errors,
+                      description: "",
+                    });
+                  }}
+                  className={`w-full resize-none rounded-xl border ${errors.description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
+                {errors.description && (
+                  <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+                )}
               </div>
               <div className="grid gap-2">
                 <label
@@ -192,14 +244,21 @@ export default function EditPlace() {
                   placeholder="Enter full description"
                   rows="5"
                   value={formData.full_description}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({
                       ...formData,
                       full_description: e.target.value,
-                    })
-                  }
-                  className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                    });
+                    setErrors({
+                      ...errors,
+                      full_description: "",
+                    });
+                  }}
+                  className={`w-full resize-none rounded-xl border ${errors.full_description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
+                {errors.full_description && (
+                  <p className="text-red-400 text-sm mt-1">{errors.full_description}</p>
+                )}
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
@@ -215,11 +274,18 @@ export default function EditPlace() {
                     id="price"
                     placeholder="Enter the price"
                     value={formData.price}
-                    onChange={(e) =>
-                      setFormData({ ...formData, price: e.target.value })
-                    }
-                    className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
+                    onChange={(e) => {
+                      setFormData({ ...formData, price: e.target.value });
+                      setErrors({
+                        ...errors,
+                        price: "",
+                      });
+                    }}
+                    className={`w-full rounded-xl border ${errors.price ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                   />
+                  {errors.price && (
+                    <p className="text-red-400 text-sm mt-1">{errors.price}</p>
+                  )}
                 </div>
 
                 <div className="grid gap-2">
@@ -244,7 +310,7 @@ export default function EditPlace() {
             <div className="grid gap-2">
               <label
                 htmlFor="image-preview"
-                className="text-sm font-medium text-gray-200"
+                className="text-sm font-medium text-gray-200 mt-4"
               >
                 Image Preview
               </label>
