@@ -126,9 +126,13 @@ export default function AddPlace() {
                   placeholder="Enter the title"
                   className={`w-full rounded-xl border ${errors.title ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                   value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, title: e.target.value });
+                    setErrors({
+                      ...errors,
+                      title: "",
+                    });
+                  }}
                 />
                 {errors.title && (
                   <p className="text-red-400 text-sm mt-1">{errors.title}</p>
@@ -153,9 +157,13 @@ export default function AddPlace() {
                           name="type"
                           value={placeType}
                           checked={formData.type === placeType}
-                          onChange={(e) =>
-                            setFormData({ ...formData, type: e.target.value })
-                          }
+                          onChange={(e) => {
+                            setFormData({ ...formData, type: e.target.value });
+                            setErrors({
+                              ...errors,
+                              type: "",
+                            });
+                          }}
                           className="h-4 w-4 border-gray-500 bg-transparent text-blue-500 focus:ring-blue-500"
                         />
                         <span>{placeType}</span>
@@ -180,11 +188,18 @@ export default function AddPlace() {
                   placeholder="Enter one line description"
                   rows="1"
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, description: e.target.value });
+                    setErrors({
+                      ...errors,
+                      description: "",
+                    });
+                  }}
                   className={`w-full resize-none rounded-xl border ${errors.description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
+                {errors.description && (
+                  <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+                )}
               </div>
               <div className="grid gap-2">
                 <label
@@ -198,14 +213,23 @@ export default function AddPlace() {
                   placeholder="Enter full description"
                   rows="5"
                   value={formData.full_description}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({
                       ...formData,
                       full_description: e.target.value,
-                    })
-                  }
+                    });
+                    setErrors({
+                      ...errors,
+                      full_description: "",
+                    });
+                  }}
                   className={`w-full resize-none rounded-xl border ${errors.full_description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
+                {errors.full_description && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.full_description}
+                  </p>
+                )}
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
@@ -221,11 +245,18 @@ export default function AddPlace() {
                     id="price"
                     placeholder="Enter the price"
                     value={formData.price}
-                    onChange={(e) =>
-                      setFormData({ ...formData, price: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setFormData({ ...formData, price: e.target.value });
+                      setErrors({
+                        ...errors,
+                        price: "",
+                      });
+                    }}
                     className={`w-full rounded-xl border ${errors.price ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                   />
+                  {errors.price && (
+                    <p className="text-red-400 text-sm mt-1">{errors.price}</p>
+                  )}
                 </div>
 
                 <div className="grid gap-2">
@@ -239,9 +270,18 @@ export default function AddPlace() {
                     type="file"
                     id="img"
                     name="img"
-                    onChange={(e) => setImage(e.target.files[0])}
-                    className={`w-full rounded-xl border ${errors.img ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-sm text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-gradient-to-r file:from-blue-500 file:to-violet-500 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:border-white/25`}
+                    onChange={(e) => {
+                      setImage(e.target.files[0]);
+                      setErrors({
+                        ...errors,
+                        image: "",
+                      });
+                    }}
+                    className={`w-full rounded-xl border ${errors.image ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-sm text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-gradient-to-r file:from-blue-500 file:to-violet-500 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:border-white/25`}
                   />
+                  {errors.image && (
+                    <p className="text-red-400 text-sm mt-1">{errors.image}</p>
+                  )}
                 </div>
               </div>
             </div>
