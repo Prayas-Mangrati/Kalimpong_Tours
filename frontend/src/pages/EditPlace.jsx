@@ -105,7 +105,16 @@ export default function EditPlace() {
     const result = await response.json();
     if (result.success) {
       setIsSubmitting(false);
-      showToast("Place updated successfully", "success", "pen");
+      if (result.coordinatesUpdated) {
+        showToast("Place updated successfully!", "success", "circle-check");
+      } else {
+        showToast(
+          "Place updated. Coordinates couldn't be refreshed.",
+          "warning",
+          "triangle-exclamation",
+        );
+      }
+
       navigate("/admin/dashboard");
     } else {
       setIsSubmitting(false);
@@ -176,7 +185,9 @@ export default function EditPlace() {
                 <label className="text-sm font-medium text-gray-200">
                   Select Type of Place
                 </label>
-                <div className={`rounded-xl p-2 ${errors.type ? "border-2 border-red-500" : ""}`}>
+                <div
+                  className={`rounded-xl p-2 ${errors.type ? "border-2 border-red-500" : ""}`}
+                >
                   {["tourist", "hotel", "homestay"].map((placeType) => (
                     <label
                       key={placeType}
@@ -229,7 +240,9 @@ export default function EditPlace() {
                   className={`w-full resize-none rounded-xl border ${errors.description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
                 {errors.description && (
-                  <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.description}
+                  </p>
                 )}
               </div>
               <div className="grid gap-2">
@@ -257,7 +270,9 @@ export default function EditPlace() {
                   className={`w-full resize-none rounded-xl border ${errors.full_description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
                 {errors.full_description && (
-                  <p className="text-red-400 text-sm mt-1">{errors.full_description}</p>
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.full_description}
+                  </p>
                 )}
               </div>
 

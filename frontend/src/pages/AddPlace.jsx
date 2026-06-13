@@ -10,11 +10,15 @@ export default function AddPlace() {
   const [searchPlace, setSearchPlace] = useState("");
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [coordinateWarning, setCoordinateWarning] = useState(false);
+  const [isFetchingCoordinates, setIsFetchingCoordinates] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     type: "",
     description: "",
     full_description: "",
+    latitude: "",
+    longitude: "",
     price: "",
   });
   const [image, setImage] = useState(null);
@@ -68,6 +72,8 @@ export default function AddPlace() {
     formDataToSend.append("description", formData.description);
     formDataToSend.append("full_description", formData.full_description);
     formDataToSend.append("price", formData.price);
+    formDataToSend.append("latitude", formData.latitude);
+    formDataToSend.append("longitude", formData.longitude);
     formDataToSend.append("img", image);
 
     const response = await fetch("http://localhost:8080/admin/add-place", {
@@ -77,7 +83,7 @@ export default function AddPlace() {
     const result = await response.json();
     //console.log(result);
     if (result.success) {
-      showToast("Place added successfully", "success", "check");
+      showToast("Place added successfully!", "success", "circle-check");
       navigate("/admin/dashboard");
       setIsSubmitting(false);
     } else {
@@ -89,6 +95,53 @@ export default function AddPlace() {
       navigate("/admin/dashboard");
     }
     setIsSubmitting(false);
+  };
+  const handleFetchCoordinates = async () => {
+    setIsFetchingCoordinates(true);
+    if (!formData.title.trim()) {
+      showToast(
+        "Please enter a title first",
+        "warning",
+        "triangle-exclamation",
+      );
+      setIsFetchingCoordinates(false);
+      return;
+    }
+    const response = await fetch(
+      "http://localhost:8080/admin/fetch-coordinates",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: formData.title,
+        }),
+      },
+    );
+
+    const result = await response.json();
+
+    if (result.success) {
+      setCoordinateWarning(false);
+
+      setFormData((prev) => ({
+        ...prev,
+        latitude: result.latitude,
+        longitude: result.longitude,
+      }));
+
+      showToast("Coordinates fetched successfully!", "success", "circle-check");
+    } else {
+      setCoordinateWarning(true);
+
+      showToast(
+        " Couldn't fetch coordinates. Please enter them manually or leave them blank.",
+        "warning",
+        "triangle-exclamation",
+      );
+    }
+    setIsFetchingCoordinates(false);
   };
 
   return (
@@ -120,22 +173,47 @@ export default function AddPlace() {
                 >
                   Title
                 </label>
-                <input
-                  type="text"
-                  id="title"
-                  placeholder="Enter the title"
-                  className={`w-full rounded-xl border ${errors.title ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
-                  value={formData.title}
-                  onChange={(e) => {
-                    setFormData({ ...formData, title: e.target.value });
-                    setErrors({
-                      ...errors,
-                      title: "",
-                    });
-                  }}
-                />
+
+                <div className="flex gap-3 items-stretch">
+                  <input
+                    type="text"
+                    id="title"
+                    placeholder="Enter the title"
+                    value={formData.title}
+                    onChange={(e) => {
+                      setFormData({ ...formData, title: e.target.value });
+                      setErrors({
+                        ...errors,
+                        title: "",
+                      });
+                    }}
+                    className={`flex-1 rounded-xl border ${
+                      errors.title ? "border-red-500" : "border-white/10"
+                    } bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={handleFetchCoordinates}
+                    disabled={isFetchingCoordinates}
+                    className="rounded-xl border border-yellow-500/40 bg-yellow-500/15 px-5 py-3 text-yellow-300 transition hover:bg-yellow-500/25 hover:border-yellow-400"
+                  >
+                    {isFetchingCoordinates ? (
+                      <>
+                        <i className="fa-solid fa-spinner fa-spin mr-2"></i>
+                        Fetching...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-location-crosshairs mr-2"></i>
+                        Fetch
+                      </>
+                    )}
+                  </button>
+                </div>
+
                 {errors.title && (
-                  <p className="text-red-400 text-sm mt-1">{errors.title}</p>
+                  <p className="text-red-400 text-sm">{errors.title}</p>
                 )}
               </div>
 
@@ -175,7 +253,6 @@ export default function AddPlace() {
                   <p className="text-red-400 text-sm mt-1">{errors.type}</p>
                 )}
               </div>
-
               <div className="grid gap-2">
                 <label
                   htmlFor="description"
@@ -198,7 +275,9 @@ export default function AddPlace() {
                   className={`w-full resize-none rounded-xl border ${errors.description ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
                 />
                 {errors.description && (
-                  <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.description}
+                  </p>
                 )}
               </div>
               <div className="grid gap-2">
@@ -231,6 +310,52 @@ export default function AddPlace() {
                   </p>
                 )}
               </div>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium text-gray-200">
+                    Latitude
+                  </label>
+
+                  <input
+                    type="text"
+                    value={formData.latitude}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        latitude: e.target.value,
+                      })
+                    }
+                    placeholder="Auto-filled or enter manually"
+                    className={`w-full rounded-xl border ${coordinateWarning ? "border-yellow-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white`}
+                  />
+                </div>
+
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium text-gray-200">
+                    Longitude
+                  </label>
+
+                  <input
+                    type="text"
+                    value={formData.longitude}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        longitude: e.target.value,
+                      })
+                    }
+                    placeholder="Auto-filled or enter manually"
+                    className={`w-full rounded-xl border ${coordinateWarning ? "border-yellow-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white`}
+                  />
+                </div>
+              </div>
+              {coordinateWarning && (
+                <p className="text-yellow-400 text-sm flex items-center gap-2 w-full">
+                  <i className="fa-solid fa-triangle-exclamation"></i>
+                  Couldn't fetch coordinates automatically. Enter them manually
+                  or leave them blank.
+                </p>
+              )}
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="grid gap-2">

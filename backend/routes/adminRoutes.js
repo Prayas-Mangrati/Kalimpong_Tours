@@ -31,9 +31,13 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
         req.body.type.toLowerCase() === "tourist attraction"
           ? "tourist"
           : req.body.type.toLowerCase(),
+      location: "kalimpong, West Bengal,India",
       description: req.body.description,
       full_description: req.body.full_description,
       price: req.body.price,
+      latitude: req.body.latitude === "" ? null : Number(req.body.latitude),
+
+      longitude: req.body.longitude === "" ? null : Number(req.body.longitude),
       img: {
         url: req.file.path,
         filename: req.file.filename,
@@ -90,6 +94,9 @@ router.put("/place/:id", upload.single("img"), async (req, res) => {
       description: req.body.description,
       full_description: req.body.full_description,
       price: req.body.price,
+      latitude: req.body.latitude === "" ? null : Number(req.body.latitude),
+
+      longitude: req.body.longitude === "" ? null : Number(req.body.longitude),
     };
 
     if (req.file) {
@@ -119,4 +126,50 @@ router.put("/place/:id", upload.single("img"), async (req, res) => {
     });
   }
 });
+router.post("/fetch-coordinates", async (req, res) => {
+  try {
+    const { title } = req.body;
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Title is required",
+      });
+    }
+
+    const query = `${title}, Kalimpong, West Bengal, India`;
+
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`,
+      {
+        headers: {
+          "User-Agent": "KPG-AI-Travel-Planner",
+        },
+      },
+    );
+
+    const data = await response.json();
+
+    if (data.length === 0) {
+      return res.json({
+        success: false,
+        message: "Couldn't fetch coordinates",
+      });
+    }
+
+    res.json({
+      success: true,
+      latitude: Number(data[0].lat),
+      longitude: Number(data[0].lon),
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch coordinates",
+    });
+  }
+});
+
 module.exports = router;
