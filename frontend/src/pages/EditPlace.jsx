@@ -11,11 +11,15 @@ export default function EditPlace() {
   const [currentImageUrl, setCurrentImageUrl] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [errors, setErrors] = useState({});
+  const [coordinateWarning, setCoordinateWarning] = useState(false);
+  const [isFetchingCoordinates, setIsFetchingCoordinates] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     type: "",
     description: "",
     full_description: "",
+    latitude: "",
+    longitude: "",
     price: "",
   });
 
@@ -38,6 +42,8 @@ export default function EditPlace() {
         type: data.type,
         description: data.description,
         full_description: data.full_description,
+        latitude: data.latitude || "",
+        longitude: data.longitude || "",
         price: data.price,
       });
 
@@ -92,6 +98,8 @@ export default function EditPlace() {
     formDataToSend.append("description", formData.description);
     formDataToSend.append("full_description", formData.full_description);
     formDataToSend.append("price", formData.price);
+    formDataToSend.append("latitude", formData.latitude);
+    formDataToSend.append("longitude", formData.longitude);
 
     if (image) {
       formDataToSend.append("img", image);
@@ -105,15 +113,7 @@ export default function EditPlace() {
     const result = await response.json();
     if (result.success) {
       setIsSubmitting(false);
-      if (result.coordinatesUpdated) {
-        showToast("Place updated successfully!", "success", "circle-check");
-      } else {
-        showToast(
-          "Place updated. Coordinates couldn't be refreshed.",
-          "warning",
-          "triangle-exclamation",
-        );
-      }
+      showToast("Place updated successfully!", "success", "circle-check");
 
       navigate("/admin/dashboard");
     } else {
@@ -137,6 +137,53 @@ export default function EditPlace() {
     } else {
       setImagePreview(currentImageUrl);
     }
+  };
+  const handleFetchCoordinates = async () => {
+    setIsFetchingCoordinates(true);
+    if (!formData.title.trim()) {
+      showToast(
+        "Please enter a title first",
+        "warning",
+        "triangle-exclamation",
+      );
+      setIsFetchingCoordinates(false);
+      return;
+    }
+    const response = await fetch(
+      "http://localhost:8080/admin/fetch-coordinates",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: formData.title,
+        }),
+      },
+    );
+
+    const result = await response.json();
+
+    if (result.success) {
+      setCoordinateWarning(false);
+
+      setFormData((prev) => ({
+        ...prev,
+        latitude: result.latitude,
+        longitude: result.longitude,
+      }));
+
+      showToast("Coordinates fetched successfully!", "success", "circle-check");
+    } else {
+      setCoordinateWarning(true);
+
+      showToast(
+        " Couldn't fetch coordinates. Please enter them manually or leave them blank.",
+        "warning",
+        "triangle-exclamation",
+      );
+    }
+    setIsFetchingCoordinates(false);
   };
 
   return (
@@ -162,20 +209,50 @@ export default function EditPlace() {
                 >
                   Title
                 </label>
-                <input
-                  type="text"
-                  id="title"
-                  placeholder="Enter the title"
-                  className={`w-full rounded-xl border ${errors.title ? "border-red-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
-                  value={formData.title}
-                  onChange={(e) => {
-                    setFormData({ ...formData, title: e.target.value });
-                    setErrors({
-                      ...errors,
-                      title: "",
-                    });
-                  }}
-                />
+
+                <div className="flex gap-3 items-stretch">
+                  <input
+                    type="text"
+                    id="title"
+                    placeholder="Enter the title"
+                    value={formData.title}
+                    onChange={(e) => {
+                      setFormData({ ...formData, title: e.target.value });
+                      setErrors({
+                        ...errors,
+                        title: "",
+                      });
+                      setCoordinateWarning(false);
+                    }}
+                    className={`flex-1 rounded-xl border ${
+                      errors.title ? "border-red-500" : "border-white/10"
+                    } bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30`}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={handleFetchCoordinates}
+                    disabled={isFetchingCoordinates}
+                    className={`rounded-xl border border-yellow-500/40 bg-yellow-500/15 px-5 py-3 text-yellow-300 transition ${
+                      isFetchingCoordinates
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-yellow-500/25 hover:border-yellow-400"
+                    }`}
+                  >
+                    {isFetchingCoordinates ? (
+                      <>
+                        <i className="fa-solid fa-spinner fa-spin mr-2"></i>
+                        Fetching...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-location-crosshairs mr-2"></i>
+                        Fetch
+                      </>
+                    )}
+                  </button>
+                </div>
+
                 {errors.title && (
                   <p className="text-red-400 text-sm mt-1">{errors.title}</p>
                 )}
@@ -186,7 +263,7 @@ export default function EditPlace() {
                   Select Type of Place
                 </label>
                 <div
-                  className={`rounded-xl p-2 ${errors.type ? "border-2 border-red-500" : ""}`}
+                  className={`grid gap-3 sm:grid-cols-3 rounded-xl p-2 ${errors.type ? "border-2 border-red-500" : ""}`}
                 >
                   {["tourist", "hotel", "homestay"].map((placeType) => (
                     <label
@@ -275,6 +352,53 @@ export default function EditPlace() {
                   </p>
                 )}
               </div>
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium text-gray-200">
+                    Latitude
+                  </label>
+
+                  <input
+                    type="text"
+                    value={formData.latitude}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        latitude: e.target.value,
+                      })
+                    }
+                    placeholder="Auto-filled or enter manually"
+                    className={`w-full rounded-xl border ${coordinateWarning ? "border-yellow-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white`}
+                  />
+                </div>
+
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium text-gray-200">
+                    Longitude
+                  </label>
+
+                  <input
+                    type="text"
+                    value={formData.longitude}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        longitude: e.target.value,
+                      })
+                    }
+                    placeholder="Auto-filled or enter manually"
+                    className={`w-full rounded-xl border ${coordinateWarning ? "border-yellow-500" : "border-white/10"} bg-black/30 px-4 py-3 text-white`}
+                  />
+                </div>
+              </div>
+              {coordinateWarning && (
+                <p className="text-yellow-400 text-sm flex items-center gap-2 w-full">
+                  <i className="fa-solid fa-triangle-exclamation"></i>
+                  Couldn't fetch coordinates automatically. Enter them manually
+                  or leave them blank.
+                </p>
+              )}
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="grid gap-2">
