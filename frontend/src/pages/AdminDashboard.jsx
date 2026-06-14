@@ -2,12 +2,21 @@ import AdminPlaceCard from "../components/AdminPlaceCard";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+ChartJS.register(ArcElement, Tooltip, Legend);
 export default function AdminDashboard() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [placeToDelete, setPlaceToDelete] = useState(null);
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const [stats, setStats] = useState({
+    totalPlaces: 0,
+    hotel: 0,
+    homestay: 0,
+    tourist: 0,
+  });
   useEffect(() => {
     async function fetchPlaces() {
       try {
@@ -25,6 +34,35 @@ export default function AdminDashboard() {
     fetchPlaces();
   }, []);
 
+  const fetchStats = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/admin/dashboard/stats",
+      );
+      const result = await response.json();
+      if (result.success) {
+        setStats(result.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const chartData = {
+    labels: ["Tourist Attractions", "Hotels", "Homestays"],
+    datasets: [
+      {
+        data: [stats.tourist, stats.hotel, stats.homestay],
+        backgroundColor: ["#3B82F6", "#A855F7", "#22C55E"],
+        borderWidth: 0,
+      },
+    ],
+  };
+
   const hotel = places.filter((place) => place.type === "hotel");
   const homestay = places.filter((place) => place.type === "homestay");
   const tourist = places.filter((place) => place.type === "tourist");
@@ -41,7 +79,9 @@ export default function AdminDashboard() {
       setPlaces((prev) =>
         prev.filter((place) => place._id !== placeToDelete._id),
       );
+      await fetchStats();
       showToast("Place deleted successfully", "success", "trash");
+
     }
     setShowDeleteModal(false);
     setPlaceToDelete(null);
@@ -61,6 +101,7 @@ export default function AdminDashboard() {
     if (result.success) {
       setPlaces((prev) => prev.filter((place) => place._id !== id));
       showToast("Place deleted successfully", "success", "trash");
+     
     }
   };
   const handleLogout = () => {
@@ -106,17 +147,60 @@ export default function AdminDashboard() {
       </div>
       <div>
         <div className="flex flex-wrap gap-6 justify-center p-6">
-          <div className="border-gradient rounded-lg">
-            <div className="border-gradient-inner p-4 rounded-lg">
-              <h2>Total Places Analytics</h2>
+          <div className="border-gradient rounded-xl flex-1 max-w-[360px] h-[360px]">
+            <div className="border-gradient-inner rounded-xl p-5 h-full flex flex-col items-center">
+              <h2 className="text-xl font-bold text-white mb-4">
+                Total Places Analytics
+              </h2>
+
+              <div className="w-40 h-40">
+                <Doughnut
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        position: "top",
+                        display: false,
+                        labels: {
+                          color: "white",
+                          boxWidth: 15,
+                          padding: 12,
+                        },
+                      },
+                    },
+                  }}
+                  data={chartData}
+                />
+                <div className="mt-4 space-y-1 text-sm text-white">
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-blue-500"></div>
+                    <span>Tourist Attractions: {stats.tourist}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-purple-500"></div>
+                    <span>Hotels: {stats.hotel}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                    <span>Homestays: {stats.homestay}</span>
+                  </div>
+                 
+                </div>
+                 <div><p className="mt-4 text-xl font-bold text-white">
+                    Total Places: {stats.totalPlaces}
+                  </p></div>
+              </div>
             </div>
           </div>
-          <div className="border-gradient rounded-lg">
+          <div className="border-gradient rounded-lg flex-1 max-w-[360px] h-[360px]">
             <div className="border-gradient-inner p-4 rounded-lg">
               <h2>Total Visitors</h2>
             </div>
           </div>
-          <div className="border-gradient rounded-lg">
+          <div className="border-gradient rounded-lg flex-1 max-w-[360px] h-[360px]">
             <div className="border-gradient-inner p-4 rounded-lg">
               <h2>Manage Destinations</h2>
             </div>

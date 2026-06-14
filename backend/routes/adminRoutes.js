@@ -172,4 +172,29 @@ router.post("/fetch-coordinates", async (req, res) => {
   }
 });
 
+router.get("/dashboard/stats", async (req, res) => {
+  try{
+    const tourist=await Place.countDocuments({type:"tourist"});
+    const hotel= await Place.countDocuments({type:"hotel"});
+    const homestay=await Place.countDocuments({type:"homestay"});
+
+    const totalPlaces=await Place.countDocuments();
+    res.json({
+      success: true,
+      data: {
+        tourist,
+        hotel,
+        homestay,
+        totalPlaces
+      }
+    });
+  }catch(err){
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch dashboard stats"
+    });
+  }
+});
+
 module.exports = router;
