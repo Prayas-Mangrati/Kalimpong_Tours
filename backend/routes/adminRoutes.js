@@ -4,6 +4,15 @@ const multer = require("multer");
 const { cloudinary, storage } = require("../cloudConfig");
 const upload = multer({ storage });
 const Place = require("../models/place");
+const AdminStats = require("../models/adminStats");
+
+const getAdminStats = async () => {
+  let stats = await AdminStats.findOne();
+  if (!stats) {
+    stats = await AdminStats.create({});
+  }
+  return stats;
+};
 
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
@@ -45,6 +54,9 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
     });
 
     await newPlace.save();
+    const stats = await getAdminStats();
+    stats.added++;
+    await stats.save();
 
     res.json({
       success: true,
@@ -65,6 +77,9 @@ router.delete("/place/:id", async (req, res) => {
     const place = await Place.findByIdAndDelete(req.params.id);
     await cloudinary.uploader.destroy(place.img.filename);
     await Place.findByIdAndDelete(req.params.id);
+    const stats = await getAdminStats();
+    stats.deleted++;
+    await stats.save();
 
     res.json({
       success: true,
@@ -113,6 +128,9 @@ router.put("/place/:id", upload.single("img"), async (req, res) => {
     }
 
     await Place.findByIdAndUpdate(req.params.id, updatePayload, { new: true });
+    const stats = await getAdminStats();
+    stats.edited++;
+    await stats.save();
 
     res.json({
       success: true,
@@ -173,26 +191,42 @@ router.post("/fetch-coordinates", async (req, res) => {
 });
 
 router.get("/dashboard/stats", async (req, res) => {
-  try{
-    const tourist=await Place.countDocuments({type:"tourist"});
-    const hotel= await Place.countDocuments({type:"hotel"});
-    const homestay=await Place.countDocuments({type:"homestay"});
+  try {
+    const tourist = await Place.countDocuments({ type: "tourist" });
+    const hotel = await Place.countDocuments({ type: "hotel" });
+    const homestay = await Place.countDocuments({ type: "homestay" });
 
-    const totalPlaces=await Place.countDocuments();
+    const totalPlaces = await Place.countDocuments();
     res.json({
       success: true,
       data: {
         tourist,
         hotel,
         homestay,
-        totalPlaces
-      }
+        totalPlaces,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch dashboard stats",
+    });
+  }
+});
+
+router.get("/dashboard/admin-actions", async (req,res) => {
+  try{
+    const stats = await getAdminStats();
+    res.json({
+      success:true,
+      data:stats,
     });
   }catch(err){
     console.log(err);
     res.status(500).json({
-      success: false,
-      message: "Failed to fetch dashboard stats"
+      success:false,
+      message:"Failed to fetch admin actions",
     });
   }
 });
