@@ -362,6 +362,34 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      <div className="border-gradient mt-10 rounded-t-lg">
+        <div className="flex justify-center items-center p-4 gap-6 rounded-t-lg border-gradient-inner flex-col">
+          {/* LOGO */}
+          <div className="text-white text-xl flex items-center gap-2">
+            <img className="logo brand-text-glow" src="/kpg_tour_logo.png" />
+            <a href="#" className="brand-text-glow p-1">
+              Kalimpong Tours
+            </a>
+          </div>
+          <div className="text-white text-md text-center px-4 font-bold">
+            Kindly{" "}
+            <span
+              className="text-red-500 cursor-pointer hover:underline"
+              onClick={handleLogout}
+            >
+              Logout
+            </span>{" "}
+            to go back to the Home page
+          </div>
+
+          {/* BOTTOM TEXT */}
+          <div className="text-white text-sm text-center px-4">
+            © 2026 Kalimpong Tours. All rights reserved | Built with ❤️ for
+            travelers exploring Kalimpong.
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
