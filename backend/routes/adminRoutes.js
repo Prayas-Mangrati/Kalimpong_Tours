@@ -5,6 +5,7 @@ const { cloudinary, storage } = require("../cloudConfig");
 const upload = multer({ storage });
 const Place = require("../models/place");
 const AdminStats = require("../models/adminStats");
+const Activity = require("../models/activity");
 
 const getAdminStats = async () => {
   let stats = await AdminStats.findOne();
@@ -54,6 +55,10 @@ router.post("/add-place", upload.single("img"), async (req, res) => {
     });
 
     await newPlace.save();
+    await Activity.create({
+      action: "added",
+      title: newPlace.title,
+    });
     const stats = await getAdminStats();
     stats.added++;
     await stats.save();
@@ -78,6 +83,10 @@ router.delete("/place/:id", async (req, res) => {
     await cloudinary.uploader.destroy(place.img.filename);
     await Place.findByIdAndDelete(req.params.id);
     const stats = await getAdminStats();
+    await Activity.create({
+      action: "deleted",
+      title: place.title,
+    });
     stats.deleted++;
     await stats.save();
 
@@ -128,6 +137,10 @@ router.put("/place/:id", upload.single("img"), async (req, res) => {
     }
 
     await Place.findByIdAndUpdate(req.params.id, updatePayload, { new: true });
+    await Activity.create({
+      action: "edited",
+      title: place.title,
+    });
     const stats = await getAdminStats();
     stats.edited++;
     await stats.save();
@@ -215,20 +228,36 @@ router.get("/dashboard/stats", async (req, res) => {
   }
 });
 
-router.get("/dashboard/admin-actions", async (req,res) => {
-  try{
+router.get("/dashboard/admin-actions", async (req, res) => {
+  try {
     const stats = await getAdminStats();
     res.json({
-      success:true,
-      data:stats,
+      success: true,
+      data: stats,
     });
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.status(500).json({
-      success:false,
-      message:"Failed to fetch admin actions",
+      success: false,
+      message: "Failed to fetch admin actions",
     });
   }
 });
+router.get("/dashboard/recent-activity", async (req, res) => {
+  try {
+    const activities = await Activity.find().sort({ createdAt: -1 }).limit(3);
 
+    res.json({
+      success: true,
+      data: activities,
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch recent activity",
+    });
+  }
+});
 module.exports = router;

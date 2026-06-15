@@ -11,6 +11,7 @@ export default function AdminDashboard() {
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const [recentActivity, setRecentActivity] = useState([]);
   const [stats, setStats] = useState({
     totalPlaces: 0,
     hotel: 0,
@@ -85,6 +86,25 @@ export default function AdminDashboard() {
     fetchAdminActions();
   }, []);
 
+  const fetchRecentActivity = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/admin/dashboard/recent-activity",
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setRecentActivity(result.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchRecentActivity();
+  }, []);
+
   const hotel = places.filter((place) => place.type === "hotel");
   const homestay = places.filter((place) => place.type === "homestay");
   const tourist = places.filter((place) => place.type === "tourist");
@@ -103,6 +123,7 @@ export default function AdminDashboard() {
       );
       await fetchStats();
       await fetchAdminActions();
+      await fetchRecentActivity();
       showToast("Place deleted successfully", "success", "trash");
     }
     setShowDeleteModal(false);
@@ -254,8 +275,30 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="border-gradient rounded-lg flex-1 max-w-[360px] h-[360px]">
-            <div className="border-gradient-inner p-4 rounded-lg">
-              <h2>Manage Destinations</h2>
+            <div className="border-gradient-inner rounded-lg h-full p-6 text-white">
+              <h2 className="text-2xl font-bold text-center mb-6">
+                Recent Activity
+              </h2>
+
+              <div className="space-y-4">
+                {recentActivity.map((activity) => (
+                  <div
+                    key={activity._id}
+                    className="border-b border-white/10 pb-3"
+                  >
+                    <p className="font-medium">
+                      {activity.action === "added" && <i className="fas fa-plus text-green-400"></i>}
+                      {activity.action === "edited" && <i className="fas fa-edit text-blue-400"></i>}
+                      {activity.action === "deleted" && <i className="fas fa-trash text-red-400"></i>}
+                    </p>
+
+                    <p className="text-sm text-gray-300">{activity.title}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+  {new Date(activity.createdAt).toLocaleString()}
+</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
