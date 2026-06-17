@@ -287,15 +287,21 @@ export default function AdminDashboard() {
                     className="border-b border-white/10 pb-3"
                   >
                     <p className="font-medium">
-                      {activity.action === "added" && <i className="fas fa-plus text-green-400"></i>}
-                      {activity.action === "edited" && <i className="fas fa-edit text-blue-400"></i>}
-                      {activity.action === "deleted" && <i className="fas fa-trash text-red-400"></i>}
+                      {activity.action === "added" && (
+                        <i className="fas fa-plus text-green-400"></i>
+                      )}
+                      {activity.action === "edited" && (
+                        <i className="fas fa-edit text-blue-400"></i>
+                      )}
+                      {activity.action === "deleted" && (
+                        <i className="fas fa-trash text-red-400"></i>
+                      )}
                     </p>
 
                     <p className="text-sm text-gray-300">{activity.title}</p>
                     <p className="text-xs text-gray-500 mt-1">
-  {new Date(activity.createdAt).toLocaleString()}
-</p>
+                      {new Date(activity.createdAt).toLocaleString()}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -305,20 +311,24 @@ export default function AdminDashboard() {
       </div>
       <div className="border-gradient m-2">
         <div className="border-gradient-inner p-4 rounded-lg ">
-          <div className="flex justify-between items-center mb-4">
-            <i
-              className="fa-solid fa-map-pin fa-2xl fa-border-white brand-text-glow whitespace-nowrap"
-              style={{ color: "rgb(224, 22, 22)" }}
-            ></i>
-            <h1 className="text-2xl font-semibold text-center mt-2 brand-text-glow whitespace-nowrap">
+          <div className="mb-4 md:grid md:grid-cols-3 md:items-center flex justify-between items-center">
+            <div className="md:justify-self-start">
+              <i
+                className="fa-solid fa-map-pin fa-2xl brand-text-glow"
+                style={{ color: "rgb(224, 22, 22)" }}
+              ></i>
+            </div>
+
+            <h1 className="text-2xl font-semibold text-center brand-text-glow whitespace-nowrap">
               Available Places
             </h1>
+
             <div
-              className="border-2 border-white bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded inline-block brand-text-glow whitespace-nowrap"
+              className="md:justify-self-end border-2 border-white bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded inline-block brand-text-glow whitespace-nowrap cursor-pointer"
               onClick={() => navigate("/admin/add-place")}
             >
               <i className="fa-solid fa-plus"></i>
-              <span className="ml-1 ">Add New</span>
+              <span className="ml-1 hidden sm:inline">Add New</span>
             </div>
           </div>
           <hr className="border-white border-2 m-4" />
