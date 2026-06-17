@@ -12,7 +12,7 @@ export default function iconbar({ selectedType, setSelectedType }) {
             className={`text-white icon-gradient-hover ${selectedType === "all" ? "icon-active" : ""}`}
             style={{ cursor: "pointer" }} 
           >
-            <i className="fa-solid fa-map"></i>
+            <i className="fa-solid fa-map  block text-xl"></i>
             <span className="text-sm">All</span>
           </div>
           <div
@@ -21,7 +21,7 @@ export default function iconbar({ selectedType, setSelectedType }) {
             style={{ cursor: "pointer" }} 
           >
             <i className="fa-solid fa-compass block text-xl "></i>
-            <span className="text-sm">Tourist spots</span>
+            <span className="text-sm">Tourist <span className="hidden sm:inline">Spots</span></span>
           </div>
           <div
             onClick={() => toggleType("homestay")}
