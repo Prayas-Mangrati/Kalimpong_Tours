@@ -245,7 +245,7 @@ router.get("/dashboard/admin-actions", async (req, res) => {
 });
 router.get("/dashboard/recent-activity", async (req, res) => {
   try {
-    const activities = await Activity.find().sort({ createdAt: -1 }).limit(3);
+    const activities = await Activity.find().sort({ createdAt: -1 }).limit(3 );
 
     res.json({
       success: true,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Navbar({ cardsRef,searchPlace, setSearchPlace }) {
+export default function Navbar({ cardsRef, searchPlace, setSearchPlace }) {
   const lat = 27.0667;
   const lon = 88.4667;
   const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -18,7 +18,7 @@ export default function Navbar({ cardsRef,searchPlace, setSearchPlace }) {
         setWeatherMain(weatherResponse?.weather?.[0]?.main || "N/A");
         setWeatherTemp(weatherResponse?.main?.temp || "N/A");
         const iconCode = weatherResponse?.weather?.[0]?.icon;
-        setWeatherIcon(`http://openweathermap.org/img/wn/${iconCode}.png`);
+        setWeatherIcon(`https://openweathermap.org/img/wn/${iconCode}.png`);
       } catch (err) {
         console.log("Weather API error", err);
         setWeatherMain("N/A");
@@ -29,71 +29,119 @@ export default function Navbar({ cardsRef,searchPlace, setSearchPlace }) {
     loadWeather();
   }, [lat, lon, API_KEY]);
 
-  const handleSearchClick=()=>{
-    cardsRef.current?.scrollIntoView({behaviour:"smooth",});
+  const handleSearchClick = () => {
+    cardsRef.current?.scrollIntoView({ behavior: "smooth" });
   };
   return (
     <div className="border-gradient">
-      <div className="rounded-b-lg border-gradient-inner p-4 text-white">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center justify-between gap-3 md:ml-10 md:justify-start">
-            <div className="flex items-center gap-2 text-lg sm:text-xl">
-              <img
-                className="logo brand-text-glow shrink-0"
-                src="/kpg_tour_logo.png"
-                alt="Kalimpong Tours logo"
-              />
-              <a href="#" className="brand-text-glow whitespace-nowrap p-1">
-                Kalimpong Tours
-              </a>
-            </div>
-
-            <div className="flex items-center gap-2 text-sm sm:text-base md:hidden">
-              {weatherIcon && (
+      <div className="rounded-b-lg border-gradient-inner p-2 md:p-4 text-white">
+        <div className="rounded-b-lg border-gradient-inner py-3 px-4 text-white">
+          <div className="flex flex-col gap-4">
+            {/* Top Row */}
+            <div className="hidden lg:flex items-center justify-between">
+              {/* Logo + Title */}
+              <div className="flex items-center gap-3">
                 <img
-                  className="h-8 w-8 shrink-0"
-                  src={weatherIcon}
-                  alt="Weather Icon"
+                  className="logo brand-text-glow shrink-0"
+                  src="/kpg_tour_logo.png"
+                  alt="Kalimpong Tours logo"
                 />
-              )}
-              <span className="whitespace-nowrap">
-                {weatherMain} ({weatherTemp}&deg;C)
-              </span>
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center gap-2 text-base">
-            {weatherIcon && (
-              <img
-                className="h-10 w-10 shrink-0"
-                src={weatherIcon}
-                alt="Weather Icon"
-              />
-            )}
-            <span className="whitespace-nowrap">
-              {weatherMain} ({weatherTemp}&deg;C)
-            </span>
-          </div>
-
-          <div className="flex gap-3 flex-row justify-center md:items-center md:gap-4 md:mr-5">
-            <div className="flex items-center md:w-auto">
-              <div className="search-icon white-shadow h-9 border-2 border-white border-r-0 rounded-l-lg">
-                <i className="fa-solid fa-magnifying-glass text-white"></i>
+                <a
+                  href="#"
+                  className="brand-text-glow whitespace-nowrap text-xl"
+                >
+                  Kalimpong Tours
+                </a>
               </div>
-              <input
-                type="search"
-                placeholder="Enter to search..."
-                className="h-9 min-w-0 w-full p-2 border-t-2 border-b-2 border-white outline-none white-shadow md:w-60 text-gray-800"
-                value={searchPlace}
-                onChange={(e) => setSearchPlace(e.target.value)}
-              />
-              <button onClick={handleSearchClick} className="h-9 px-3 border-2 border-white border-l-0 rounded-r-lg text-white white-shadow" >
-                Search
-              </button>
+
+              {/* Weather */}
+              <div className="flex items-center gap-2">
+                {weatherIcon && (
+                  <img
+                    className="h-8 w-8"
+                    src={weatherIcon}
+                    alt="Weather Icon"
+                  />
+                )}
+                <span>
+                  {weatherMain} ({weatherTemp}&deg;C)
+                </span>
+              </div>
+
+              {/* Search */}
+              <div className="flex items-center">
+                <div className="search-icon white-shadow h-9 border-2 border-white border-r-0 rounded-l-lg">
+                  <i className="fa-solid fa-magnifying-glass text-white"></i>
+                </div>
+
+                <input
+                  type="search"
+                  placeholder="Enter to search..."
+                  className="h-9 w-60 p-2 border-t-2 border-b-2 border-white outline-none white-shadow text-gray-800"
+                  value={searchPlace}
+                  onChange={(e) => setSearchPlace(e.target.value)}
+                />
+
+                <button
+                  onClick={handleSearchClick}
+                  className="h-9 px-3 border-2 border-white border-l-0 rounded-r-lg text-white white-shadow"
+                >
+                  Search
+                </button>
+              </div>
             </div>
-            {/* <button className="bg-red-500 border-2 text-white rounded p-1 white-shadow self-end md:self-auto">
-              Logout
-            </button> */}
+
+            {/* Mobile + Tablet Layout */}
+            <div className="flex flex-col items-center gap-3 lg:hidden">
+              <div className="flex items-center gap-4">
+                <img
+                  className="logo brand-text-glow shrink-0"
+                  src="/kpg_tour_logo.png"
+                  alt="Kalimpong Tours logo"
+                />
+
+                <a
+                  href="#"
+                  className="brand-text-glow whitespace-nowrap text-xl"
+                >
+                  Kalimpong Tours
+                </a>
+
+                <div className="hidden sm:flex items-center gap-2">
+                  {weatherIcon && (
+                    <img
+                      className="h-8 w-8"
+                      src={weatherIcon}
+                      alt="Weather Icon"
+                    />
+                  )}
+                  <span>
+                    {weatherMain} ({weatherTemp}&deg;C)
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center w-full justify-center">
+                <div className="search-icon white-shadow h-9 border-2 border-white border-r-0 rounded-l-lg">
+                  <i className="fa-solid fa-magnifying-glass text-white"></i>
+                </div>
+
+                <input
+                  type="search"
+                  placeholder="Enter to search..."
+                  className="h-9 w-[60%] sm:w-72 p-2 border-t-2 border-b-2 border-white outline-none white-shadow text-gray-800"
+                  value={searchPlace}
+                  onChange={(e) => setSearchPlace(e.target.value)}
+                />
+
+                <button
+                  onClick={handleSearchClick}
+                  className="h-9 px-3 border-2 border-white border-l-0 rounded-r-lg text-white white-shadow"
+                >
+                  Search
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

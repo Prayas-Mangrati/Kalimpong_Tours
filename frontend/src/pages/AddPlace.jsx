@@ -1,13 +1,9 @@
-import { useRef, useState } from "react";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
 
 export default function AddPlace() {
   const navigate = useNavigate();
-  const cardsRef = useRef(null);
-  const [searchPlace, setSearchPlace] = useState("");
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [coordinateWarning, setCoordinateWarning] = useState(false);
@@ -146,12 +142,6 @@ export default function AddPlace() {
 
   return (
     <>
-      <Navbar
-        cardsRef={cardsRef}
-        searchPlace={searchPlace}
-        setSearchPlace={setSearchPlace}
-      />
-
       <main className="px-4 py-6 sm:px-6 lg:px-8">
         <div className="mx-auto w-full max-w-4xl border-gradient rounded-3xl shadow-2xl">
           <div className="border-gradient-inner rounded-3xl p-5 sm:p-6 lg:p-8">
@@ -165,7 +155,7 @@ export default function AddPlace() {
               </h2>
             </div>
 
-            <div ref={cardsRef} className="grid gap-5">
+            <div  className="grid gap-5">
               <div className="grid gap-2">
                 <label
                   htmlFor="title"
@@ -422,8 +412,6 @@ export default function AddPlace() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }

@@ -191,7 +191,7 @@ export default function AdminDashboard() {
         <div className="flex flex-wrap gap-6 justify-center p-6">
           <div className="border-gradient rounded-xl flex-1 max-w-[360px] h-[360px]">
             <div className="border-gradient-inner rounded-xl h-full flex flex-col items-center p-5">
-              <h2 className="text-2xl font-bold text-white mb-3">
+              <h2 className=" brand-text-glow text-2xl font-bold text-white mb-3">
                 Total Places Analytics
               </h2>
 
@@ -237,7 +237,7 @@ export default function AdminDashboard() {
           </div>
           <div className="border-gradient rounded-lg flex-1 max-w-[360px] h-[360px]">
             <div className="border-gradient-inner rounded-lg h-full flex flex-col justify-center px-8 py-6 text-white">
-              <h2 className="text-2xl font-bold text-center mb-8">
+              <h2 className=" brand-text-glow text-2xl font-bold text-center mb-8">
                 Admin Actions
               </h2>
 
@@ -276,7 +276,7 @@ export default function AdminDashboard() {
           </div>
           <div className="border-gradient rounded-lg flex-1 max-w-[360px] h-[360px]">
             <div className="border-gradient-inner rounded-lg h-full p-6 text-white">
-              <h2 className="text-2xl font-bold text-center mb-6">
+              <h2 className=" brand-text-glow text-2xl font-bold text-center mb-6">
                 Recent Activity
               </h2>
 
