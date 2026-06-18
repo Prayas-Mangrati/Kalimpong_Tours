@@ -8,6 +8,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function AdminDashboard() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [placeToDelete, setPlaceToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -146,6 +147,7 @@ export default function AdminDashboard() {
   const tourist = places.filter((place) => place.type === "tourist");
 
   const confirmDelete = async () => {
+    setIsDeleting(true);
     const token = localStorage.getItem("token");
     const response = await fetch(
       `http://localhost:8080/admin/place/${placeToDelete._id}`,
@@ -174,6 +176,7 @@ export default function AdminDashboard() {
       showToast("Failed to delete the place", "error", "circle-xmark");
     }
     setShowDeleteModal(false);
+    setIsDeleting(false);
     setPlaceToDelete(null);
   };
 
@@ -461,9 +464,14 @@ export default function AdminDashboard() {
 
                 <button
                   onClick={confirmDelete}
-                  className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white transition"
+                  disabled={isDeleting}
+                  className={`px-5 py-2 rounded-xl border border-white/20 text-white ${
+                    isDeleting
+                      ? "bg-red-300 cursor-not-allowed"
+                      : "bg-red-500 hover:bg-red-600"
+                  }`}
                 >
-                  Delete
+                  {isDeleting ? "Deleting..." : "Delete"}
                 </button>
               </div>
             </div>
