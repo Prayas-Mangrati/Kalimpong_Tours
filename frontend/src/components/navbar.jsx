@@ -20,7 +20,11 @@ export default function Navbar({ cardsRef, searchPlace, setSearchPlace }) {
         const iconCode = weatherResponse?.weather?.[0]?.icon;
         setWeatherIcon(`https://openweathermap.org/img/wn/${iconCode}.png`);
       } catch (err) {
-        console.log("Weather API error", err);
+         showToast(
+    "Couldn't fetch weather data. Please check your internet connection.",
+    "error",
+    "circle-xmark"
+  );
         setWeatherMain("N/A");
         setWeatherTemp("N/A");
       }

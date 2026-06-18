@@ -104,7 +104,11 @@ export default function PlaceDetail() {
         setUserPosition([pos.coords.latitude, pos.coords.longitude]);
       },
       (err) => {
-        console.log("Location error", err);
+        showToast(
+          "Couldn't access your location. Please allow location access for better experience.",
+          "error",
+          "circle-xmark",
+        );
       },
     );
   }, []);
@@ -142,7 +146,11 @@ export default function PlaceDetail() {
         const latLngPath = coordinates.map(([lng, lat]) => [lat, lng]);
         setRoutePath(latLngPath);
       } catch (routeError) {
-        console.log("Route fetch failed", routeError);
+        showToast(
+          "Couldn't fetch route data. Please check your internet connection.",
+          "error",
+          "circle-xmark",
+        );
         setRoutePath([
           [userLat, userLng],
           [destinationLat, destinationLng],
@@ -200,13 +208,20 @@ export default function PlaceDetail() {
           </p>
 
           <p className="mt-10 mb-2 font-bold text-xl">Let's Get You There...</p>
-          <div className="h-[400px] border-gradient rounded-lg ">
+          <div className="border-gradient rounded-lg"><div className="h-[400px] border-gradient-inner rounded-lg ">
             {!hasCoordinates ? (
-              <MapContainer>
-                <div className="text-white mt-20 text-center">
-                  <h1>Location coordinates are missing for this place.</h1>
-                </div>
-              </MapContainer>
+              <div className="h-full flex flex-col items-center justify-center text-white rounded-lg bg-black/20">
+                <i className="fa-solid fa-location-crosshairs text-5xl text-red-400 mb-4"></i>
+
+                <h2 className="text-xl font-semibold mb-2">
+                  Coordinates Not Available
+                </h2>
+
+                <p className="text-white/70 text-center max-w-sm px-4">
+                  Location coordinates have not been added for this destination
+                  yet.
+                </p>
+              </div>
             ) : (
               <MapContainer
                 center={destination}
@@ -251,7 +266,7 @@ export default function PlaceDetail() {
                 )}
               </MapContainer>
             )}
-          </div>
+          </div></div>
         </div>
       </div>
       <Footer />

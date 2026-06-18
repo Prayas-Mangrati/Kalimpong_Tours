@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { useToast } from "../context/ToastContext";
@@ -39,6 +40,7 @@ const stats = [
 
 export default function About() {
   const { showToast } = useToast();
+  const navigate = useNavigate();
   const [feedbackForm, setFeedbackForm] = useState({
     name: "",
     message: "",
@@ -63,7 +65,7 @@ export default function About() {
         setFeedbacks(result.data);
       }
     } catch (err) {
-      console.log(err);
+      showToast("Something went wrong", "error", "circle-xmark");
     }
   };
   useEffect(() => {
@@ -238,6 +240,15 @@ export default function About() {
                     decisions
                   </p>
                 </div>
+
+                <div className="flex justify-end md:pt-28">
+                  <button
+                    className="bg-red-500 border-2 rounded-md px-4 py-2 white-shadow text-white"
+                    onClick={() => navigate("/")}
+                  >
+                    Back to Home
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -291,7 +302,7 @@ export default function About() {
             <div className="mt-8">
               {feedbacks.length > 0 ? (
                 <div className="grid gap-4 md:grid-cols-2">
-                  {feedbacks.slice(0,6).map((feedback) => {
+                  {feedbacks.slice(0, 6).map((feedback) => {
                     const initial =
                       feedback.name?.trim()?.charAt(0)?.toUpperCase() || "K";
                     const ratingValue = Number(feedback.rating || 0);

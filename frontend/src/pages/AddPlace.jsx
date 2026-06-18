@@ -86,7 +86,7 @@ export default function AddPlace() {
       return;
     }
     const result = await response.json();
-    //console.log(result);
+
     if (result.success) {
       showToast("Place added successfully!", "success", "circle-check");
       navigate("/admin/dashboard");

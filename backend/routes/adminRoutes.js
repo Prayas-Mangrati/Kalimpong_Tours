@@ -86,7 +86,6 @@ router.post(
         message: "Place added successfully",
       });
     } catch (err) {
-      console.log(err);
 
       res.status(500).json({
         success: false,
@@ -128,7 +127,6 @@ router.delete("/place/:id", verifyToken, async (req, res) => {
       message: "Place deleted successfully",
     });
   } catch (err) {
-    console.log(err);
 
     res.status(500).json({
       success: false,
@@ -190,7 +188,6 @@ router.put(
         message: "Place updated successfully",
       });
     } catch (err) {
-      console.log(err);
       res.status(500).json({
         success: false,
         message: "Failed to update place",
@@ -235,8 +232,6 @@ router.post("/fetch-coordinates", verifyToken, async (req, res) => {
       longitude: Number(data[0].lon),
     });
   } catch (err) {
-    console.log(err);
-
     res.status(500).json({
       success: false,
       message: "Failed to fetch coordinates",
@@ -261,7 +256,7 @@ router.get("/dashboard/stats", verifyToken, async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
+
     res.status(500).json({
       success: false,
       message: "Failed to fetch dashboard stats",
@@ -277,7 +272,6 @@ router.get("/dashboard/admin-actions", verifyToken, async (req, res) => {
       data: stats,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       success: false,
       message: "Failed to fetch admin actions",
@@ -293,7 +287,6 @@ router.get("/dashboard/recent-activity", verifyToken, async (req, res) => {
       data: activities,
     });
   } catch (err) {
-    console.log(err);
 
     res.status(500).json({
       success: false,

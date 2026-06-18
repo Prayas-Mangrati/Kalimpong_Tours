@@ -18,7 +18,6 @@ router.post("/", async (req, res) => {
       data: feedback,
     });
   } catch (err) {
-    console.log(err);
 
     res.status(500).json({
       success: false,
@@ -38,7 +37,6 @@ router.get("/", async (req, res) => {
       data: feedbacks,
     });
   } catch (err) {
-    console.log(err);
 
     res.status(500).json({
       success: false,

@@ -70,7 +70,11 @@ export default function AdminDashboard() {
         setStats(result.data);
       }
     } catch (err) {
-      console.log(err);
+      showToast(
+        "An error occurred while fetching stats",
+        "error",
+        "circle-xmark",
+      );
     }
   };
 
@@ -107,7 +111,11 @@ export default function AdminDashboard() {
         setAdminActions(result.data);
       }
     } catch (err) {
-      console.log(err);
+      showToast(
+        "An error occurred while fetching admin actions",
+        "error",
+        "circle-xmark",
+      );
     }
   };
 
@@ -134,7 +142,11 @@ export default function AdminDashboard() {
         setRecentActivity(result.data);
       }
     } catch (err) {
-      console.log(err);
+      showToast(
+        "An error occurred while fetching recent activity",
+        "error",
+        "circle-xmark",
+      );
     }
   };
   useEffect(() => {
@@ -148,7 +160,11 @@ export default function AdminDashboard() {
           fetchRecentActivity(),
         ]);
       } catch (err) {
-        console.log(err);
+        showToast(
+          "An error occurred while loading dashboard data",
+          "error",
+          "circle-xmark",
+        );
       } finally {
         setDashboardLoading(false);
       }
