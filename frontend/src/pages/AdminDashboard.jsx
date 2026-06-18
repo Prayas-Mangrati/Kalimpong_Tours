@@ -2,6 +2,7 @@ import AdminPlaceCard from "../components/AdminPlaceCard";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
+import LoadingSpinner from "../components/LoadingSpinner";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -13,6 +14,8 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [recentActivity, setRecentActivity] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
   const [stats, setStats] = useState({
     totalPlaces: 0,
     hotel: 0,
@@ -36,8 +39,11 @@ export default function AdminDashboard() {
           "error",
           "circle-xmark",
         );
+      } finally {
+        setLoading(false);
       }
     }
+    setLoading(true);
     fetchPlaces();
   }, []);
 
@@ -67,10 +73,6 @@ export default function AdminDashboard() {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
 
   const chartData = {
     labels: ["Tourist Attractions", "Hotels", "Homestays"],
@@ -108,9 +110,6 @@ export default function AdminDashboard() {
       console.log(err);
     }
   };
-  useEffect(() => {
-    fetchAdminActions();
-  }, []);
 
   const fetchRecentActivity = async () => {
     try {
@@ -139,7 +138,23 @@ export default function AdminDashboard() {
     }
   };
   useEffect(() => {
-    fetchRecentActivity();
+    const loadDashboardData = async () => {
+      try {
+        setDashboardLoading(true);
+
+        await Promise.all([
+          fetchStats(),
+          fetchAdminActions(),
+          fetchRecentActivity(),
+        ]);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setDashboardLoading(false);
+      }
+    };
+
+    loadDashboardData();
   }, []);
 
   const hotel = places.filter((place) => place.type === "hotel");
@@ -211,6 +226,13 @@ export default function AdminDashboard() {
 
     navigate("/");
   };
+
+  if (dashboardLoading) {
+    return <LoadingSpinner text="Loading Admin Dashboard..." />;
+  }
+  if(loading) {
+    return <LoadingSpinner text="Loading Places..." />;
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <div className="border-gradient">

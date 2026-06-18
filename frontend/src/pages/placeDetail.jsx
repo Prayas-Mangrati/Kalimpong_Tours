@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { useNavigate } from "react-router-dom";
-
+import LoadingSpinner from "../components/LoadingSpinner";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -75,9 +75,11 @@ export default function PlaceDetail() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchPlace = async () => {
       try {
+        setLoading(true);
         const res = await fetch(`${API_URL}/places/${id}`);
 
         if (!res.ok) {
@@ -88,6 +90,8 @@ export default function PlaceDetail() {
         setPlace(data);
       } catch (fetchError) {
         setError(fetchError.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -156,13 +160,9 @@ export default function PlaceDetail() {
       </div>
     );
   }
-
-  if (!place)
-    return (
-      <div className="text-white mt-80 ml-80">
-        <h1>Loading...</h1>
-      </div>
-    );
+  if (loading) {
+    return <LoadingSpinner text="Loading Destination Details..." />;
+  }
 
   const destination = [Number(place.latitude), Number(place.longitude)];
 
@@ -195,8 +195,8 @@ export default function PlaceDetail() {
           <p className="mt-8">{place.full_description}</p>
 
           <p className="mt-8">
-            {place.type === "tourist" ? "Entry Fee: " : "Price: "}₹
-            {place.price}{place.type === "tourist" ? "/Person" : "/Night"}
+            {place.type === "tourist" ? "Entry Fee: " : "Price: "}₹{place.price}
+            {place.type === "tourist" ? "/Person" : "/Night"}
           </p>
 
           <p className="mt-10 mb-2 font-bold text-xl">Let's Get You There...</p>
