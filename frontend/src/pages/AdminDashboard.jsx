@@ -42,9 +42,22 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
+      const token = localStorage.getItem("token");
+
       const response = await fetch(
         "http://localhost:8080/admin/dashboard/stats",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
+
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem("token");
+        navigate("/admin/login");
+        return;
+      }
       const result = await response.json();
       if (result.success) {
         setStats(result.data);
@@ -71,9 +84,21 @@ export default function AdminDashboard() {
 
   const fetchAdminActions = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(
         "http://localhost:8080/admin/dashboard/admin-actions",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
+
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem("token");
+        navigate("/admin/login");
+        return;
+      }
       const result = await response.json();
       if (result.success) {
         setAdminActions(result.data);
@@ -88,9 +113,20 @@ export default function AdminDashboard() {
 
   const fetchRecentActivity = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(
         "http://localhost:8080/admin/dashboard/recent-activity",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem("token");
+        navigate("/admin/login");
+        return;
+      }
 
       const result = await response.json();
 
@@ -110,12 +146,21 @@ export default function AdminDashboard() {
   const tourist = places.filter((place) => place.type === "tourist");
 
   const confirmDelete = async () => {
+    const token = localStorage.getItem("token");
     const response = await fetch(
       `http://localhost:8080/admin/place/${placeToDelete._id}`,
       {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
     );
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("token");
+      navigate("/admin/login");
+      return;
+    }
     const result = await response.json();
     if (result.success) {
       setPlaces((prev) =>
@@ -125,6 +170,8 @@ export default function AdminDashboard() {
       await fetchAdminActions();
       await fetchRecentActivity();
       showToast("Place deleted successfully", "success", "trash");
+    } else {
+      showToast("Failed to delete the place", "error", "circle-xmark");
     }
     setShowDeleteModal(false);
     setPlaceToDelete(null);
@@ -134,10 +181,18 @@ export default function AdminDashboard() {
     setPlaceToDelete(data);
     setShowDeleteModal(true);
     return;
-
+    const token = localStorage.getItem("token");
     const response = await fetch(`http://localhost:8080/admin/place/${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("token");
+      navigate("/admin/login");
+      return;
+    }
 
     const result = await response.json();
 
@@ -147,7 +202,7 @@ export default function AdminDashboard() {
     }
   };
   const handleLogout = () => {
-    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("token");
 
     showToast("Logged out successfully!", "success", "right-from-bracket");
 

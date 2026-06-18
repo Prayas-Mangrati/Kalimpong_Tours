@@ -33,7 +33,17 @@ export default function EditPlace() {
 
   useEffect(() => {
     const fetchPlace = async () => {
-      const response = await fetch(`http://localhost:8080/admin/place/${id}`);
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:8080/admin/place/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem("token");
+        navigate("/admin/login");
+        return;
+      }
 
       const data = await response.json();
 
@@ -104,11 +114,19 @@ export default function EditPlace() {
     if (image) {
       formDataToSend.append("img", image);
     }
-
+    const token = localStorage.getItem("token");
     const response = await fetch(`http://localhost:8080/admin/place/${id}`, {
       method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formDataToSend,
     });
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("token");
+      navigate("/admin/login");
+      return;
+    }
 
     const result = await response.json();
     if (result.success) {
@@ -149,18 +167,25 @@ export default function EditPlace() {
       setIsFetchingCoordinates(false);
       return;
     }
+    const token = localStorage.getItem("token");
     const response = await fetch(
       "http://localhost:8080/admin/fetch-coordinates",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           title: formData.title,
         }),
       },
     );
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("token");
+      navigate("/admin/login");
+      return;
+    }
 
     const result = await response.json();
 

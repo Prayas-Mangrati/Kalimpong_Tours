@@ -72,10 +72,19 @@ export default function AddPlace() {
     formDataToSend.append("longitude", formData.longitude);
     formDataToSend.append("img", image);
 
+    const token = localStorage.getItem("token");
     const response = await fetch("http://localhost:8080/admin/add-place", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formDataToSend,
     });
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("token");
+      navigate("/admin/login");
+      return;
+    }
     const result = await response.json();
     //console.log(result);
     if (result.success) {
@@ -103,18 +112,26 @@ export default function AddPlace() {
       setIsFetchingCoordinates(false);
       return;
     }
+    const token = localStorage.getItem("token");
     const response = await fetch(
       "http://localhost:8080/admin/fetch-coordinates",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           title: formData.title,
         }),
       },
     );
+
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("token");
+      navigate("/admin/login");
+      return;
+    }
 
     const result = await response.json();
 
@@ -155,7 +172,7 @@ export default function AddPlace() {
               </h2>
             </div>
 
-            <div  className="grid gap-5">
+            <div className="grid gap-5">
               <div className="grid gap-2">
                 <label
                   htmlFor="title"

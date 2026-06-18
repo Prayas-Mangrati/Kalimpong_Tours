@@ -24,7 +24,7 @@ export default function AdminLogin() {
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem("isAdmin", "true");
+        localStorage.setItem("token", data.token);
         showToast("Logged in successfully", "success","right-to-bracket");
 
         navigate("/admin/dashboard");
