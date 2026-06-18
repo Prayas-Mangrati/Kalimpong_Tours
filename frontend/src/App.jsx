@@ -14,6 +14,7 @@ import EditPlace from "./pages/EditPlace.jsx";
 import Toast from "./components/Toast.jsx";
 import ProtectedRoute from "./components/ProtectedRoutes.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import About from "./pages/About.jsx";
 function App() {
   const [selectedType, setSelectedType] = useState("all");
   const [searchPlace, setSearchPlace] = useState("");
@@ -57,6 +58,7 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         <Route path="/admin/edit/:id" element={<ProtectedRoute><EditPlace /></ProtectedRoute>} />
+        <Route path="/about" element={<About/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

@@ -22,6 +22,7 @@ export default function Footer() {
               <a href="#">Tourist Spots</a>
               <a href="#">Plan Your Trip</a>
               <a href="/admin/login" className="icon-active">Login as Admin</a>
+              <a href="/about" className="icon-active">About Us</a>
             </div>
           </div>
 

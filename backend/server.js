@@ -26,9 +26,11 @@ async function main() {
 const placeRoutes = require("./routes/placeRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const feedbackRoutes = require("./routes/feedbackRoutes");
 app.use("/places", placeRoutes);
 app.use("/chat", chatRoutes);
 app.use("/admin",adminRoutes);
+app.use("/feedback", feedbackRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server running..");
