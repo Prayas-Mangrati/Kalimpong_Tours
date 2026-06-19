@@ -22,15 +22,15 @@ export default function AiAssistant() {
 
   async function sendMessage(messageText=AiInput) {
     
-    if (isTyping ||messageText.trim() === "") return; //ignore empty message
+    if (isTyping ||messageText.trim() === "") return; 
     const userMessage = {
       text: messageText,
       sender: "user",
     };
 
-    setMessages((prevMessages) => [...prevMessages, userMessage]); //copy old arrray and append new message
+    setMessages((prevMessages) => [...prevMessages, userMessage]); 
     const currentMessage = messageText;
-    setAiInput(""); //clear input after sending
+    setAiInput(""); 
     setAiInput("");
     setIsTyping(true);
 

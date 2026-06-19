@@ -94,24 +94,6 @@ export default function AdminLogin() {
                 className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-blue-400/70 focus:ring-2 focus:ring-blue-500/30"
               />
             </div>
-
-            <div className="flex items-center justify-between gap-4 text-sm text-gray-300">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-500 bg-transparent text-blue-500 focus:ring-blue-500"
-                />
-                <span>Remember me</span>
-              </label>
-
-              <button
-                type="button"
-                className="font-medium text-blue-300 transition hover:text-blue-200"
-              >
-                Forgot password?
-              </button>
-            </div>
-
             <button
               type="submit"
               className="mt-2 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-violet-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:scale-[1.01] hover:shadow-blue-500/30 focus:outline-none focus:ring-2 focus:ring-blue-400/60"

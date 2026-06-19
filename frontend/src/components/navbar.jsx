@@ -41,9 +41,7 @@ export default function Navbar({ cardsRef, searchPlace, setSearchPlace }) {
       <div className="rounded-b-lg border-gradient-inner p-2 md:p-4 text-white">
         <div className="rounded-b-lg border-gradient-inner py-3 px-4 text-white">
           <div className="flex flex-col gap-4">
-            {/* Top Row */}
             <div className="hidden lg:flex items-center justify-between">
-              {/* Logo + Title */}
               <div className="flex items-center gap-3">
                 <img
                   className="logo brand-text-glow shrink-0"
@@ -57,8 +55,6 @@ export default function Navbar({ cardsRef, searchPlace, setSearchPlace }) {
                   Kalimpong Tours
                 </a>
               </div>
-
-              {/* Weather */}
               <div className="flex items-center gap-2">
                 {weatherIcon && (
                   <img
@@ -71,8 +67,6 @@ export default function Navbar({ cardsRef, searchPlace, setSearchPlace }) {
                   {weatherMain} ({weatherTemp}&deg;C)
                 </span>
               </div>
-
-              {/* Search */}
               <div className="flex items-center">
                 <div className="search-icon white-shadow h-9 border-2 border-white border-r-0 rounded-l-lg">
                   <i className="fa-solid fa-magnifying-glass text-white"></i>
@@ -94,8 +88,6 @@ export default function Navbar({ cardsRef, searchPlace, setSearchPlace }) {
                 </button>
               </div>
             </div>
-
-            {/* Mobile + Tablet Layout */}
             <div className="flex flex-col items-center gap-3 lg:hidden">
               <div className="flex items-center gap-4">
                 <img

@@ -160,12 +160,11 @@ router.put(
       };
 
       if (req.file) {
-        // Delete old image from Cloudinary
         if (place?.img?.filename) {
           await cloudinary.uploader.destroy(place.img.filename);
         }
 
-        // Save new image
+
         updatePayload.img = {
           url: req.file.path,
           filename: req.file.filename,
