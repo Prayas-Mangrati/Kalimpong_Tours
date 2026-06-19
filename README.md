@@ -101,21 +101,6 @@ cd backend
 npm install
 ```
 
-Create a `.env` file:
-
-```env
-MONGO_URL=your_mongodb_connection_string
-
-ADMIN_USERNAME=your_admin_username
-ADMIN_PASSWORD=your_admin_password
-
-JWT_SECRET=your_jwt_secret
-
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_KEY=your_cloudinary_key
-CLOUDINARY_SECRET=your_cloudinary_secret
-```
-
 Start backend:
 
 ```bash
@@ -128,13 +113,6 @@ npm start
 cd frontend
 npm install
 ```
-
-Create a `.env` file:
-
-```env
-VITE_OPENWEATHER_API_KEY=your_api_key
-```
-
 Run frontend:
 
 ```bash
